@@ -1,6 +1,7 @@
 #ifndef MATRIXHH
 #define MATRIXHH
 #include<iostream>
+#include<string>
 using namespace std;
 
 class Matrix
@@ -8,6 +9,8 @@ class Matrix
 private:
 	int rows,columns;
 	double** elements;
+	string name;
+
 
 public:
 //essential

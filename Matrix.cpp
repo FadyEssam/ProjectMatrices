@@ -1,12 +1,15 @@
 #include "Matrix.h"
 #include <iostream>
 #include <ostream>
+#define DEFAULT_NAME ""
+
 
 Matrix::Matrix()
 {
 	rows = 0;
 	columns = 0;
 	elements = NULL;
+	name = DEFAULT_NAME;
 }
 
 
@@ -14,7 +17,7 @@ Matrix::Matrix(int r, int c)
 {
 	rows = r;
 	columns = c;
-
+	name = DEFAULT_NAME;
 	elements = new double* [rows];
 	for(int i=0; i<rows; i++)
 		elements[i]  =  new double[columns];
@@ -82,7 +85,7 @@ void Matrix::print()
 		{
 			for(int j=0; j<columns; j++)
 		{
-			cout<<elements[i][j]<<" ";
+			cout<<elements[i][j]<<"\t";
 
 		}
 		cout<<"\n";
