@@ -20,8 +20,10 @@ public:
 	void destroy();
 	void setRows(int r);
 	void setColumns(int c);
+	void setName(string s);
 	int getColumns();
 	int getRows();
+	string getName();
 
 //printing
 	void print();

@@ -62,6 +62,12 @@ void Matrix::setColumns(int c)
 	columns = c;
 }
 
+void Matrix::setName(string s)
+{
+
+	name = s;
+}
+
 
 int Matrix::getColumns()
 {
@@ -74,7 +80,10 @@ int Matrix::getRows()
 }
 
 
-
+string Matrix::getName()
+{
+	return name;
+}
 
 //================================== Printing
 
