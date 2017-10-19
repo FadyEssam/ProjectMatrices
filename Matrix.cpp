@@ -49,7 +49,7 @@ void Matrix::destroy()
 	delete[] elements;
 	rows = 0;
 	columns = 0;
-	
+
 }
 
 void Matrix::setRows(int r)
@@ -157,10 +157,10 @@ Matrix Matrix::operator- (Matrix m)
 }
 
 
-void Matrix::operator= (Matrix m) // to make it separately editable 
+void Matrix::operator= (Matrix m) // to make it separately editable
 {
-	
-		
+
+
 		if(this->elements!=NULL)this->destroy();
 		rows = m.rows;
 		columns = m.columns;
@@ -173,16 +173,16 @@ void Matrix::operator= (Matrix m) // to make it separately editable
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<columns; j++)
 				elements[i][j] =m[i][j];
-		
 
-	
+
+
 }
 
 
 
-Matrix Matrix::operator* (Matrix m) // to make it separately editable 
+Matrix Matrix::operator* (Matrix m) // to make it separately editable
 {
-	
+
 		if(columns!= m.rows)  throw "Functions can't be multiplied";
 
 		else
@@ -203,14 +203,14 @@ Matrix Matrix::operator* (Matrix m) // to make it separately editable
 			return result;
 
 		}
-		
 
-	
+
+
 }
 
-Matrix Matrix::operator/ (Matrix m) // to make it separately editable 
+Matrix Matrix::operator/ (Matrix m) // to make it separately editable
 {
-	Matrix tempM(rows,columns); 
+	Matrix tempM(rows,columns);
 
 
 		for(int i=0; i<rows; i++)
@@ -218,9 +218,9 @@ Matrix Matrix::operator/ (Matrix m) // to make it separately editable
 				tempM[i][j] = elements[i][j];
 
 	return tempM*(m.inverse());
-		
 
-	
+
+
 }
 
 
@@ -238,8 +238,8 @@ double Matrix::determinant()
 		else
 		{
 			for(int i=0; i<columns; i++)
-				
-				{	
+
+				{
 					if(i%2==0)
 						sign = 1;
 					else sign = -1;
@@ -258,7 +258,7 @@ double Matrix::determinant()
 
 	Matrix Matrix::removeColRow(int r, int c)
 	{
-		
+
 		Matrix result(rows-1,columns-1);
 		int i2=0; int j2=0;
 
@@ -310,6 +310,17 @@ return result;
 
 		double determinant = this->determinant();
 
+		if(rows==2)
+		{
+
+			tempM[0][0] = elements[1][1]/determinant;
+			tempM[1][1] = elements[0][0]/determinant;
+			tempM[0][1] = (-1 * elements[0][1])/determinant;
+			tempM[1][0] = (-1 * elements[1][0])/determinant;
+
+			return tempM;
+		}
+
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<columns; j++)
 			{
@@ -329,4 +340,4 @@ return result;
 			return tempM.transbose();
 
 
-	}	
+	}
