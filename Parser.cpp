@@ -1,23 +1,24 @@
 #include "Parser.h"
 #include <stdlib.h>
+#include <fstream>
 #define ROWS_SEPARATOR ";"
 #define COLUMN_SEPARATOR " "
 
 
 Parser::Parser()
 {
-	size=0;
+	size = 0;
 }
 
 
-int Parser::split(string s,string separators,string** result)
+int Parser::split(string s, string separators, string** result)
 {
-	int numberOfElements= 1; int counter=0; int lastPosition=0;
-	for(int i=0; i<s.length(); i++)
+	int numberOfElements = 1; int counter = 0; int lastPosition = 0;
+	for (int i = 0; i<s.length(); i++)
 	{
-		for (int j=0; j<separators.length(); j++)
+		for (int j = 0; j<separators.length(); j++)
 		{
-			if(s[i]==separators[j])
+			if (s[i] == separators[j])
 			{
 				numberOfElements++;
 			}
@@ -25,22 +26,22 @@ int Parser::split(string s,string separators,string** result)
 	}
 
 
-	 *result= new string[numberOfElements];
+	*result = new string[numberOfElements];
 
-	for(int i=0; i<s.length(); i++)
+	for (int i = 0; i<s.length(); i++)
 	{
-		for (int j=0; j<separators.length(); j++)
+		for (int j = 0; j<separators.length(); j++)
 		{
-			if(s[i]==separators[j])
+			if (s[i] == separators[j])
 			{
-				(*result)[counter] = s.substr(lastPosition,i-lastPosition);
-				lastPosition=i+1;
+				(*result)[counter] = s.substr(lastPosition, i - lastPosition);
+				lastPosition = i + 1;
 				counter++;
-				while(separators.find(s[i])!=-1) i++;
+				while (separators.find(s[i]) != -1) i++;
 			}
 		}
 	}
-	if(lastPosition!=s.length())
+	if (lastPosition != s.length())
 	{
 		(*result)[counter] = s.substr(lastPosition);
 	}
@@ -49,20 +50,20 @@ int Parser::split(string s,string separators,string** result)
 		counter--;
 	}
 	counter++;
-	return counter; 
+	return counter;
 
 
 }
 
 
-int Parser::split(string s,string separators,string** result,int* numberOfSeparators, string** seps)
+int Parser::split(string s, string separators, string** result, int* numberOfSeparators, string** seps)
 {
-	int numberOfElements= 1; int counter=0; int lastPosition=0; int Separators=0; int sepsCounter=0;
-	for(int i=0; i<s.length(); i++)
+	int numberOfElements = 1; int counter = 0; int lastPosition = 0; int Separators = 0; int sepsCounter = 0;
+	for (int i = 0; i<s.length(); i++)
 	{
-		for (int j=0; j<separators.length(); j++)
+		for (int j = 0; j<separators.length(); j++)
 		{
-			if(s[i]==separators[j])
+			if (s[i] == separators[j])
 			{
 				numberOfElements++;
 				Separators++;
@@ -70,23 +71,24 @@ int Parser::split(string s,string separators,string** result,int* numberOfSepara
 		}
 	}
 
-	 *seps = new string[Separators];
-	 *result= new string[numberOfElements];
+	*seps = new string[Separators];
+	*result = new string[numberOfElements];
 
-	for(int i=0; i<s.length(); i++)
+	for (int i = 0; i<s.length(); i++)
 	{
-		for (int j=0; j<separators.length(); j++)
+		for (int j = 0; j<separators.length(); j++)
 		{
-			if(s[i]==separators[j])
-			{	(*seps)[sepsCounter] = separators[j];
+			if (s[i] == separators[j])
+			{
+				(*seps)[sepsCounter] = separators[j];
 				sepsCounter++;
-				(*result)[counter] = s.substr(lastPosition,i-lastPosition);
-				lastPosition=i+1;
+				(*result)[counter] = s.substr(lastPosition, i - lastPosition);
+				lastPosition = i + 1;
 				counter++;
 			}
 		}
 	}
-	if(lastPosition!=s.length())
+	if (lastPosition != s.length())
 	{
 		(*result)[counter] = s.substr(lastPosition);
 	}
@@ -96,7 +98,7 @@ int Parser::split(string s,string separators,string** result,int* numberOfSepara
 	}
 	counter++;
 	*numberOfSeparators = Separators;
-	return counter; 
+	return counter;
 
 }
 
@@ -104,31 +106,31 @@ int Parser::split(string s,string separators,string** result,int* numberOfSepara
 string Parser::removeSidesSpaces(string s)
 
 {
-	int start=0;
-	for(int i=0; i<s.length(); i++)		
-		if(s[i]==' ')
-		start++;
-		else break;
-	
-
-
-	string result = s.substr(start);
-
-	for(int i=result.length()-1; i>=0; i--)
-		if(result[i]==' ')
-		result.erase(i,1);
+	int start = 0;
+	for (int i = 0; i<s.length(); i++)
+		if (s[i] == ' ')
+			start++;
 		else break;
 
 
-	return result;
+
+		string result = s.substr(start);
+
+		for (int i = result.length() - 1; i >= 0; i--)
+			if (result[i] == ' ')
+				result.erase(i, 1);
+			else break;
+
+
+			return result;
 
 }
 
 string Parser::removeAllSpaces(string s)
 {
-	for(int i=s.length()-1; i>=0; i--)
-		if(s[i]==' ')
-			s.erase(i,1);
+	for (int i = s.length() - 1; i >= 0; i--)
+		if (s[i] == ' ')
+			s.erase(i, 1);
 
 	return s;
 }
@@ -138,19 +140,19 @@ Matrix* Parser::find(string name)
 
 {
 
-	for(int i=0; i<size; i++)
+	for (int i = 0; i<size; i++)
 	{
-		if(name==matrices[i]->getName())
+		if (name == matrices[i]->getName())
 			return matrices[i];
 	}
 
 	return NULL;
 }
- 
 
-Matrix* Parser::add(string name,int rows, int columns)
+
+Matrix* Parser::add(string name, int rows, int columns)
 {
-	Matrix* added = new Matrix(rows,columns,name);
+	Matrix* added = new Matrix(rows, columns, name);
 
 	matrices.push_back(added);
 	size++;
@@ -160,57 +162,71 @@ Matrix* Parser::add(string name,int rows, int columns)
 
 Matrix* Parser::findOrAdd(string name, int rows, int columns)
 {
-	 Matrix* found = find(name);
+	Matrix* found = find(name);
 
-	 if(found==NULL)
-	 	found = add(name,rows,columns);
+	if (found == NULL)
+		found = add(name, rows, columns);
 
 	return found;
 }
 
 
-void Parser::handleLine(string line)
+void Parser::handleLine(string line, int print)
 {
 
-	if( line.find("[")!= -1) //it is declaring a new matrix
+	if (line.find("[") != -1) //it is declaring a new matrix
 	{
 		string* operation;
-		split(line,"=",&operation);
+		split(line, "=", &operation);
 
 		operation[0] = removeAllSpaces(operation[0]);
 		operation[1] = removeSidesSpaces(operation[1]);
-		operation[1].erase(operation[1].find("["),1); 
-		operation[1].erase(operation[1].find("]"),1); //remove "[,]"
+		operation[1].erase(operation[1].find("["), 1);
+		operation[1].erase(operation[1].find("]"), 1); //remove "[,]"
 		string* rows;
-		int numberOfRows = split(operation[1],ROWS_SEPARATOR,&rows);  
+		int numberOfRows = split(operation[1], ROWS_SEPARATOR, &rows);
 		int numberOfColumns;
-		string** elementsCut;
+		string** elementsCut= new string* [numberOfRows];
 
 
-		for(int i=0; i<numberOfRows; i++)
+		for (int i = 0; i<numberOfRows; i++)
 		{
 			rows[i] = removeSidesSpaces(rows[i]);
-			numberOfColumns = split(rows[i], COLUMN_SEPARATOR, &(elementsCut[i]) );
+			numberOfColumns = split(rows[i], COLUMN_SEPARATOR, &(elementsCut[i]));
 		}
 
-		Matrix* host = findOrAdd(operation[0],numberOfRows, numberOfColumns);
+		Matrix* host = findOrAdd(operation[0], numberOfRows, numberOfColumns);
 
-		for(int i=0; i<numberOfRows; i++)
-			for(int j=0; j<numberOfColumns; j++)
+		for (int i = 0; i<numberOfRows; i++)
+			for (int j = 0; j<numberOfColumns; j++)
 			{
 				elementsCut[i][j] = removeAllSpaces(elementsCut[i][j]);
 				(*host)[i][j] = atof(elementsCut[i][j].c_str());
 			}
-			cout<<(*host);
+		if (print == 1)
+			cout << (*host);
 	}
 
 
 
 	else //it's an operation on existing matrix
 	{
+		 while(1)
+		 {
+		 	int pos = line.find("./");
+		 	if(pos==-1) break;
+		 	line.replace(pos,2,"$");
+		 }
+
+		 while(1)
+		 {
+		 	int pos = line.find(".*");
+		 	if(pos==-1) break;
+		 	line.replace(pos,2,"#");
+		 } 
 		line = removeAllSpaces(line);
 		string* operation;
-		split(line,"=",&operation);
+		split(line, "=", &operation);
 		Matrix result;
 
 		string* seps;
@@ -218,29 +234,73 @@ void Parser::handleLine(string line)
 		string* variables;
 		int numberOfVariables;
 
-		numberOfVariables = split(operation[1],"+-/*\'",&variables,&numberOfSeparators,&seps);
-
+		numberOfVariables = split(operation[1], "+-/*\'$#", &variables, &numberOfSeparators, &seps);
+		if(find(variables[0])!=NULL)
 		result = *find(variables[0]);
-		for(int i=0; i<numberOfSeparators; i++)
+		for (int i = 0; i<numberOfSeparators; i++)
 		{
-			if(!seps[i].compare("+"))
-				result = result + *(find(variables[i+1]));
-			else if(!seps[i].compare("-"))
-				result = result - *(find(variables[i+1]));
-			else if(!seps[i].compare("/"))
-				result = result / *(find(variables[i+1]));
-			else if(!seps[i].compare("*"))
-				result = result * (*(find(variables[i+1])));
-			else if(!seps[i].compare("/"))
-				result = result / (*find(variables[i+1]));
-			else if(!seps[i].compare("\'"))
-					result = result.inverse();
-		}
+			if (!seps[i].compare("+"))
+				result = result + *(find(variables[i + 1]));
+			else if (!seps[i].compare("-"))
+				result = result - *(find(variables[i + 1]));
+			else if (!seps[i].compare("/"))
+				result = result / *(find(variables[i + 1]));
+			else if (!seps[i].compare("*"))
+				result = result * (*(find(variables[i + 1])));
+			else if (!seps[i].compare("/"))
+				result = result / (*find(variables[i + 1]));
+			else if (!seps[i].compare("\'"))
+				result = result.inverse();
+			 else if(!seps[i].compare("$"))
+			 		{
+				 double value = atof(variables[i].c_str());
+			 			result = (*(find(variables[i+1]))) / value;
 
-		Matrix* host = findOrAdd(operation[0],result.getRows(),result.getColumns());
+			 		}
+			 else if(!seps[i].compare("#"))
+
+			 		{
+			 			double value = atof(variables[i].c_str());
+			 			result = (*(find(variables[i+1]))) * value;
+
+			 		}
+		}
+		Matrix* host = findOrAdd(operation[0], result.getRows(), result.getColumns());
 		(*host) = result;
-		cout<<(*host);
+
+		if (print == 1)
+			cout << (*host);
 	}
 
+
+}
+
+
+ void Parser::load(string filepath)
+ {
+ 	 ifstream file1(filepath);
+ 	 string s;
+ 	while(getline(file1,s))
+ 	{
+ 		 handle(s);
+ 	}
+
+ 	 file1.close();
+ }
+
+
+void Parser::handle(string line)
+{
+
+	string* sides;
+	int numberOfSides = split(line, "=", &sides);
+
+
+	for (int i = numberOfSides - 1; i>1; i--)
+	{
+		handleLine(sides[i - 1] + string("=") + sides[i], 0);
+	}
+
+	handleLine(sides[0] + string("=") + sides[1], 1);
 
 }

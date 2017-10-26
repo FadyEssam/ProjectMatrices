@@ -1,21 +1,20 @@
 #include <iostream>
 #include "Matrix.h"
 #include "Parser.h"
-#include <stdlib.h>
 using namespace std;
-Parser parser;
-
 
 int main()
 {
-
-	string s;
-	while(1)
-	{
-		getline(cin,s);
-		if(!s.compare("exit")) break;
-		parser.handleLine(s);
-	}
+	Parser parser;
+	 string path = "/home/fady/matrices/commands";
+	 parser.load(path);
 	
-return 0;
+	/*string s;
+	while (1)
+	{
+		getline(cin, s);
+		if (!s.compare("exit")) break;
+		parser.handle(s);
+	}*/
+	return 0;
 }

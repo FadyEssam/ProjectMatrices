@@ -18,31 +18,31 @@ Matrix::Matrix(int r, int c)
 	rows = r;
 	columns = c;
 	name = DEFAULT_NAME;
-	elements = new double* [rows];
-	for(int i=0; i<rows; i++)
-		elements[i]  =  new double[columns];
+	elements = new double*[rows];
+	for (int i = 0; i<rows; i++)
+		elements[i] = new double[columns];
 
 }
 
 
-Matrix::Matrix(int r, int c,string n)
+Matrix::Matrix(int r, int c, string n)
 {
 	rows = r;
 	columns = c;
 	name = n;
-	elements = new double* [rows];
-	for(int i=0; i<rows; i++)
-		elements[i]  =  new double[columns];
+	elements = new double*[rows];
+	for (int i = 0; i<rows; i++)
+		elements[i] = new double[columns];
 
 
 }
 
 void Matrix::initialize(double value)
-	{
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
-				elements[i][j] = value;
-	}
+{
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			elements[i][j] = value;
+}
 
 
 // void Matrix::Matrix(Matrix& m)
@@ -64,27 +64,28 @@ void Matrix::initialize(double value)
 void Matrix::destroy()
 {
 
-	for(int i=0; i<rows; i++)
+	for (int i = 0; i<rows; i++)
 		delete[] elements[i];
 
 	delete[] elements;
 	rows = 0;
 	columns = 0;
+	elements = NULL;
 
 }
 
 void Matrix::setRows(int r)
 {
 	rows = r;
-	elements = new double* [rows];
+	elements = new double*[rows];
 
 }
 
 void Matrix::setColumns(int c)
 {
 	columns = c;
-	for(int i=0; i<rows; i++)
-		elements[i]  =  new double[columns];
+	for (int i = 0; i<rows; i++)
+		elements[i] = new double[columns];
 }
 
 void Matrix::setName(string s)
@@ -115,15 +116,16 @@ string Matrix::getName()
 
 void Matrix::print()
 {
-	for(int i=0; i<rows; i++)
+	for (int i = 0; i<rows; i++)
+	{
+		for (int j = 0; j<columns; j++)
 		{
-			for(int j=0; j<columns; j++)
-		{
-			cout<<elements[i][j]<<"\t";
+			cout << elements[i][j] << "\t";
 
 		}
-		cout<<"\n";
+		cout << "\n";
 	}
+	cout << endl;
 }
 
 
@@ -135,28 +137,28 @@ ostream& operator<< (ostream & o, Matrix m)
 
 //================================== Editing
 
-	void Matrix::setElement(int r, int c, double value)
-	{
-		elements[r][c] = value;
-	}
+void Matrix::setElement(int r, int c, double value)
+{
+	elements[r][c] = value;
+}
 
-	double* Matrix::operator[](int r)
-	{
-		return elements[r];
-	}
+double* Matrix::operator[](int r)
+{
+	return elements[r];
+}
 
 
 //======================================== Arihtmatic
 Matrix Matrix::operator+ (Matrix m)
 {
-	if((m.rows!= rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
 
 	else
 	{
-		Matrix result(rows,columns);
+		Matrix result(rows, columns);
 
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
+		for (int i = 0; i<rows; i++)
+			for (int j = 0; j<columns; j++)
 				result[i][j] = elements[i][j] + m[i][j];
 
 		return result;
@@ -166,14 +168,14 @@ Matrix Matrix::operator+ (Matrix m)
 
 Matrix Matrix::operator- (Matrix m)
 {
-	if((m.rows!= rows) || (m.columns != columns)) throw "You can't substract two matrices with different R,C";
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't substract two matrices with different R,C";
 
 	else
 	{
-		Matrix result(rows,columns);
+		Matrix result(rows, columns);
 
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
+		for (int i = 0; i<rows; i++)
+			for (int j = 0; j<columns; j++)
 				result[i][j] = elements[i][j] - m[i][j];
 
 		return result;
@@ -186,18 +188,18 @@ void Matrix::operator= (Matrix m) // to make it separately editable
 {
 
 
-		if(this->elements!=NULL)this->destroy();
-		rows = m.rows;
-		columns = m.columns;
+	if (this->elements != NULL)this->destroy();
+	rows = m.rows;
+	columns = m.columns;
 
-		elements = new double* [rows];
-	for(int i=0; i<rows; i++)
- 		elements[i]  =  new double[columns];
+	elements = new double*[rows];
+	for (int i = 0; i<rows; i++)
+		elements[i] = new double[columns];
 
 
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
-				elements[i][j] =m[i][j];
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			elements[i][j] = m[i][j];
 
 
 
@@ -208,39 +210,65 @@ void Matrix::operator= (Matrix m) // to make it separately editable
 Matrix Matrix::operator* (Matrix m) // to make it separately editable
 {
 
-		if(columns!= m.rows)  throw "Functions can't be multiplied";
+	if (columns != m.rows)  throw "Functions can't be multiplied";
 
-		else
-		{
-			Matrix result(rows,m.columns);
+	else
+	{
+		Matrix result(rows, m.columns);
 
-			for(int i=0; i<rows; i++)
-				for(int j=0; j<m.columns; j++)
+		for (int i = 0; i<rows; i++)
+			for (int j = 0; j<m.columns; j++)
+			{
+				result[i][j] = 0;
+				for (int k = 0; k<columns; k++)
 				{
-					result[i][j]  = 0;
-					for(int k=0; k<columns; k++)
-					{
-						result[i][j] += (elements[i][k]  * m[k][j]);
-					}
-
+					result[i][j] += (elements[i][k] * m[k][j]);
 				}
 
-			return result;
+			}
 
-		}
+		return result;
+
+	}
 
 
 
 }
 
+
+Matrix Matrix::operator*(double value)
+{
+
+	Matrix result = *(this);
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = result[i][j] * value;
+
+
+	return result;
+}
+
+
+
+Matrix Matrix::operator/(double value)
+{
+	Matrix result = *(this);
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = result[i][j] / value;
+
+	return result;
+}
+
+
 Matrix Matrix::operator/ (Matrix m) // to make it separately editable
 {
-	Matrix tempM(rows,columns);
+	Matrix tempM(rows, columns);
 
 
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
-				tempM[i][j] = elements[i][j];
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			tempM[i][j] = elements[i][j];
 
 	return tempM*(m.inverse());
 
@@ -251,28 +279,28 @@ Matrix Matrix::operator/ (Matrix m) // to make it separately editable
 
 double Matrix::determinant()
 {
-	double result=0; char sign;
+	double result = 0; char sign;
 
-	if(rows!=columns) throw "Can't compute diterminant for this function";
+	if (rows != columns) throw "Can't compute diterminant for this function";
 
 	else
 	{
-		if(rows == 2)
-			return ((elements[0][0] * elements[1][1]) -  (elements[0][1] * elements[1][0]));
+		if (rows == 2)
+			return ((elements[0][0] * elements[1][1]) - (elements[0][1] * elements[1][0]));
 
 		else
 		{
-			for(int i=0; i<columns; i++)
+			for (int i = 0; i<columns; i++)
 
-				{
-					if(i%2==0)
-						sign = 1;
-					else sign = -1;
+			{
+				if (i % 2 == 0)
+					sign = 1;
+				else sign = -1;
 
 
-					result += sign* elements[0][i] * (this->removeColRow(0,i).determinant());
-				}
-				return result;
+				result += sign* elements[0][i] * (this->removeColRow(0, i).determinant());
+			}
+			return result;
 		}
 
 
@@ -281,25 +309,25 @@ double Matrix::determinant()
 }
 
 
-	Matrix Matrix::removeColRow(int r, int c)
+Matrix Matrix::removeColRow(int r, int c)
+{
+
+	Matrix result(rows - 1, columns - 1);
+	int i2 = 0; int j2 = 0;
+
+	for (int i = 0; i<rows - 1; i++, i2++)
 	{
-
-		Matrix result(rows-1,columns-1);
-		int i2=0; int j2=0;
-
-		for(int i=0; i<rows-1; i++,i2++)
+		for (int j = 0; j < columns - 1; j++, j2++)
 		{
-			for (int j = 0; j < columns-1; j++,j2++)
-			{
-				if(i2==r) i2++;
-				if(j2==c) j2++;
+			if (i2 == r) i2++;
+			if (j2 == c) j2++;
 
-				result[i][j] = elements[i2][j2];
-			}
-			j2=0;
+			result[i][j] = elements[i2][j2];
 		}
-			return result;
+		j2 = 0;
 	}
+	return result;
+}
 
 
 
@@ -308,61 +336,61 @@ double Matrix::determinant()
 Matrix Matrix::transbose()
 {
 
-	Matrix result (columns,rows);
+	Matrix result(columns, rows);
 
-	for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
-			{
-				result[j][i] = elements[i][j];
-			}
-return result;
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+		{
+			result[j][i] = elements[i][j];
+		}
+	return result;
 }
 
 
 
 
-	Matrix Matrix::inverse()
+Matrix Matrix::inverse()
 
+{
+	if (rows != columns) throw "Can't compute inverse for this function";
+
+	Matrix tempM(rows, columns); int sign;  double temp;
+
+
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			tempM[i][j] = elements[i][j];
+
+	double determinant = this->determinant();
+
+	if (rows == 2)
 	{
-			if(rows!=columns) throw "Can't compute inverse for this function";
 
-		Matrix tempM(rows,columns); int sign;  double temp;
+		tempM[0][0] = elements[1][1] / determinant;
+		tempM[1][1] = elements[0][0] / determinant;
+		tempM[0][1] = (-1 * elements[0][1]) / determinant;
+		tempM[1][0] = (-1 * elements[1][0]) / determinant;
 
+		return tempM;
+	}
 
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
-				tempM[i][j] = elements[i][j];
-
-		double determinant = this->determinant();
-
-		if(rows==2)
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
 		{
+			temp = this->removeColRow(i, j).determinant();
+			temp = temp / determinant;
 
-			tempM[0][0] = elements[1][1]/determinant;
-			tempM[1][1] = elements[0][0]/determinant;
-			tempM[0][1] = (-1 * elements[0][1])/determinant;
-			tempM[1][0] = (-1 * elements[1][0])/determinant;
+			if ((i % 2) == (j % 2)) sign = 1;
+			else sign = -1;
 
-			return tempM;
+			temp = temp*sign;
+			tempM[i][j] = temp;
+
+
 		}
 
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<columns; j++)
-			{
-				temp = this->removeColRow(i,j).determinant();
-				temp = temp/determinant;
 
-				if((i%2) == (j%2)) sign = 1;
-				else sign = -1;
-
-				temp = temp*sign;
-				tempM[i][j] = temp;
+	return tempM.transbose();
 
 
-			}
-
-
-			return tempM.transbose();
-
-
-	}
+}

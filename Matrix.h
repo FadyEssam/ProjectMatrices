@@ -1,5 +1,4 @@
-#ifndef MATRIXHH
-#define MATRIXHH
+#pragma once
 #include<iostream>
 #include<string>
 using namespace std;
@@ -7,13 +6,13 @@ using namespace std;
 class Matrix
 {
 private:
-	int rows,columns;
+	int rows, columns;
 	double** elements;
 	string name;
 
 
 public:
-//essential
+	//essential
 	Matrix();
 	Matrix(int r, int c);
 	Matrix(int r, int c, string n);
@@ -27,35 +26,35 @@ public:
 	int getRows();
 	string getName();
 
-//printing
+	//printing
 	void print();
-	
 
-//changing values
+
+	//changing values
 	void setElement(int r, int c, double value);
 	double* operator[](int r);
 
 
-//Arithmatics
+	//Arithmatics
 
 	Matrix operator+(Matrix m);
 	void operator=(Matrix m);
 	Matrix operator-(Matrix m);
 	Matrix operator*(Matrix m);
+	Matrix operator*(double value);
 	double determinant();
 	Matrix inverse();
 	Matrix transbose();
 	Matrix operator/(Matrix m);
+	Matrix operator/(double value);
 
-	
 
-//Helping functions
+
+	//Helping functions
 private:
 	Matrix removeColRow(int r, int c);
 
 };
 
- ostream& operator<< (ostream & o, Matrix m);
+ostream& operator<< (ostream & o, Matrix m);
 
-
-#endif
