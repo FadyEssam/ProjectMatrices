@@ -16,10 +16,10 @@ private:
 	Matrix* find(string name);
 	Matrix* add(string name, int rows, int columns);
 	Matrix* findOrAdd(string name, int rows, int columns);
+	void handleLine(string line, int print);
 
 public:
 	Parser();
-	void handleLine(string line, int print);
 	void handle(string line);
 	void load(string filePath);
 

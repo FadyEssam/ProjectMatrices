@@ -218,12 +218,7 @@ void Parser::handleLine(string line, int print)
 		 	line.replace(pos,2,"$");
 		 }
 
-		 while(1)
-		 {
-		 	int pos = line.find(".*");
-		 	if(pos==-1) break;
-		 	line.replace(pos,2,"#");
-		 } 
+		 
 		line = removeAllSpaces(line);
 		string* operation;
 		split(line, "=", &operation);
@@ -250,20 +245,14 @@ void Parser::handleLine(string line, int print)
 			else if (!seps[i].compare("/"))
 				result = result / (*find(variables[i + 1]));
 			else if (!seps[i].compare("\'"))
-				result = result.inverse();
+				result = result.transbose();
 			 else if(!seps[i].compare("$"))
 			 		{
-				 double value = atof(variables[i].c_str());
-			 			result = (*(find(variables[i+1]))) / value;
+				
+			 			result = (*(find(variables[i+1]))).inverse();
 
 			 		}
-			 else if(!seps[i].compare("#"))
-
-			 		{
-			 			double value = atof(variables[i].c_str());
-			 			result = (*(find(variables[i+1]))) * value;
-
-			 		}
+			 
 		}
 		Matrix* host = findOrAdd(operation[0], result.getRows(), result.getColumns());
 		(*host) = result;
