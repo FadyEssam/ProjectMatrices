@@ -80,6 +80,7 @@ int Parser::split(string s, string separators, string** result, int* numberOfSep
 		{
 			if (s[i] == separators[j])
 			{
+
 				(*seps)[sepsCounter] = separators[j];
 				sepsCounter++;
 				(*result)[counter] = s.substr(lastPosition, i - lastPosition);

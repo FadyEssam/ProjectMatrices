@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef PARSERHH
+#define PARSERHH
 #include <vector>
 #include "Matrix.h"
 #include <string>
@@ -26,3 +26,4 @@ public:
 
 
 };
+#endif

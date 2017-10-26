@@ -9,6 +9,7 @@ int main()
 	 string path = "/home/fady/matrices/commands";
 	 parser.load(path);
 	
+
 	// string s;
 	// while (1)
 	// {

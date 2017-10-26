@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MATRIXHH
+#define MATRIXHH
 #include<iostream>
 #include<string>
 using namespace std;
@@ -58,3 +59,4 @@ private:
 
 ostream& operator<< (ostream & o, Matrix m);
 
+#endif
