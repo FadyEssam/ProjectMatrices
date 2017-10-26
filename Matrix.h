@@ -16,6 +16,8 @@ public:
 //essential
 	Matrix();
 	Matrix(int r, int c);
+	Matrix(int r, int c, string n);
+	void initialize(double value);
 	//void Matrix(Matrix& m);
 	void destroy();
 	void setRows(int r);

@@ -21,7 +21,28 @@ Matrix::Matrix(int r, int c)
 	elements = new double* [rows];
 	for(int i=0; i<rows; i++)
 		elements[i]  =  new double[columns];
+
 }
+
+
+Matrix::Matrix(int r, int c,string n)
+{
+	rows = r;
+	columns = c;
+	name = n;
+	elements = new double* [rows];
+	for(int i=0; i<rows; i++)
+		elements[i]  =  new double[columns];
+
+
+}
+
+void Matrix::initialize(double value)
+	{
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<columns; j++)
+				elements[i][j] = value;
+	}
 
 
 // void Matrix::Matrix(Matrix& m)
@@ -55,11 +76,15 @@ void Matrix::destroy()
 void Matrix::setRows(int r)
 {
 	rows = r;
+	elements = new double* [rows];
+
 }
 
 void Matrix::setColumns(int c)
 {
 	columns = c;
+	for(int i=0; i<rows; i++)
+		elements[i]  =  new double[columns];
 }
 
 void Matrix::setName(string s)
