@@ -219,6 +219,12 @@ void Parser::handleLine(string line, int print)
 		 	line.replace(pos,2,"$");
 		 }
 
+		while(1)
+		 {
+		 	int pos = line.find(".*");
+		 	if(pos==-1) break;
+		 	line.replace(pos,2,"#");
+		 }
 		 
 		line = removeAllSpaces(line);
 		string* operation;
@@ -293,4 +299,18 @@ void Parser::handle(string line)
 
 	handleLine(sides[0] + string("=") + sides[1], 1);
 
+}
+
+
+
+int Parser::isNumber(string s)
+{
+	for (int i = 0; i < s.length(); ++i)
+	{
+		
+		if(!(  (s[i]>47 && s[i]<58) || s[i]=='.') )
+			{return 0;}
+	}
+
+	return 1;
 }

@@ -42,12 +42,16 @@ public:
 	void operator=(Matrix m);
 	Matrix operator-(Matrix m);
 	Matrix operator*(Matrix m);
-	Matrix operator*(double value);
 	double determinant();
 	Matrix inverse();
 	Matrix transbose();
 	Matrix operator/(Matrix m);
 	Matrix operator/(double value);
+	Matrix operator*(double value);
+	Matrix operator-(double value);
+	Matrix operator+(double value);
+	Matrix dotProduct(Matrix m);
+	Matrix dotDivision(Matrix m);
 
 
 

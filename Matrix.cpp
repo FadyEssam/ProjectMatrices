@@ -116,8 +116,11 @@ string Matrix::getName()
 
 void Matrix::print()
 {
+	cout<<endl<<name<<"="<<endl;
+
 	for (int i = 0; i<rows; i++)
 	{
+		cout<<"\t";
 		for (int j = 0; j<columns; j++)
 		{
 			cout << elements[i][j] << "\t";
@@ -236,6 +239,41 @@ Matrix Matrix::operator* (Matrix m) // to make it separately editable
 }
 
 
+Matrix Matrix::dotProduct (Matrix m)
+{
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
+
+	else
+	{
+		Matrix result(rows, columns);
+
+		for (int i = 0; i<rows; i++)
+			for (int j = 0; j<columns; j++)
+				result[i][j] = elements[i][j] * m[i][j];
+
+		return result;
+
+	}
+}
+
+
+Matrix Matrix::dotDivision (Matrix m)
+{
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
+
+	else
+	{
+		Matrix result(rows, columns);
+
+		for (int i = 0; i<rows; i++)
+			for (int j = 0; j<columns; j++)
+				result[i][j] = elements[i][j] / m[i][j];
+
+		return result;
+
+	}
+}
+
 Matrix Matrix::operator*(double value)
 {
 
@@ -256,6 +294,31 @@ Matrix Matrix::operator/(double value)
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 			result[i][j] = result[i][j] / value;
+
+	return result;
+}
+
+
+Matrix Matrix::operator-(double value)
+{
+
+	Matrix result = *(this);
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = result[i][j] - value;
+
+
+	return result;
+}
+
+
+
+Matrix Matrix::operator+(double value)
+{
+	Matrix result = *(this);
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = result[i][j] + value;
 
 	return result;
 }
