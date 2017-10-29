@@ -236,8 +236,11 @@ void Parser::handleLine(string line, int print)
 		string* variables;
 		int numberOfVariables;
 
-		numberOfVariables = split(operation[1], "+-/*\'$#", &variables, &numberOfSeparators, &seps);
+		numberOfVariables = split(operation[1], "+-/*$#", &variables, &numberOfSeparators, &seps);
 
+
+		for(int i=0; i<numberOfVariables; i++)
+			prototypePriorities(variables[i]);
 
 		if(isNumber(variables[0])) // setting result to first variable
 		{
@@ -381,4 +384,45 @@ int Parser::isNumber(string s)
 	}
 
 	return 1;
+}
+
+
+void Parser::prototypePriorities(string var)
+{
+	int positionInverse = var.find("inverse(");
+	int positionTransbose = var.find("\'");
+
+	if(positionInverse != -1)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1);
+		original.erase(0,8);
+
+		original.erase(original.find(")"),1);
+
+		Matrix originalM = *find(original);
+		string onlyInverse = var;
+
+		if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = add(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.inverse();
+
+
+
+	}
+
+
+	if(positionTransbose == (var.length()-1))
+	{
+		string original = var;
+		original.erase(original.length()-1,1);
+
+		Matrix originalM = *find(original);
+		Matrix* added = add(var,originalM.getColumns(),originalM.getRows());
+		*added = originalM.transbose();
+	}
 }

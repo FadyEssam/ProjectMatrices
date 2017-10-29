@@ -1,6 +1,6 @@
 CC=g++
 Deps= main.cpp Matrix.cpp Parser.cpp
-OutputName=output.exe
+OutputName=g16mathlab
 
 test: $(Deps)
 	$(CC) $(Deps) -o $(OutputName)

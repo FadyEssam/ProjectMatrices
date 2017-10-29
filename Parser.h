@@ -18,6 +18,7 @@ private:
 	Matrix* findOrAdd(string name, int rows, int columns);
 	void handleLine(string line, int print);
 	int isNumber(string s);
+	void prototypePriorities(string var);
 
 public:
 	Parser();
