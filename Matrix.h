@@ -46,8 +46,8 @@ public:
 	Matrix inverse();
 	Matrix transbose();
 	Matrix operator/(Matrix m);
-	Matrix operator/(double value);
-	Matrix operator*(double value);
+	Matrix dotDivision(double value);
+	Matrix dotProduct(double value);
 	Matrix operator-(double value);
 	Matrix operator+(double value);
 	Matrix dotProduct(Matrix m);

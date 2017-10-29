@@ -237,26 +237,94 @@ void Parser::handleLine(string line, int print)
 		int numberOfVariables;
 
 		numberOfVariables = split(operation[1], "+-/*\'$#", &variables, &numberOfSeparators, &seps);
-		if(find(variables[0])!=NULL)
-		result = *find(variables[0]);
+
+
+		if(isNumber(variables[0])) // setting result to first variable
+		{
+			for(int i=0; i<numberOfVariables; i++)
+				if(!isNumber(variables[i]))
+				{
+					Matrix first = *find(variables[i]);
+					result.setRows(first.getRows());
+					result.setColumns(first.getColumns());
+
+					double val = atof(variables[0].c_str());
+					result.initialize(val);
+					break;
+				}
+		}
+
+		else 
+			{
+				result = *find(variables[0]);
+			}
+
+
 		for (int i = 0; i<numberOfSeparators; i++)
 		{
 			if (!seps[i].compare("+"))
-				result = result + *(find(variables[i + 1]));
+			{
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result + val;
+			 			}
+			 	else
+				
+					result = result + *(find(variables[i + 1]));
+			}
+			
 			else if (!seps[i].compare("-"))
-				result = result - *(find(variables[i + 1]));
-			else if (!seps[i].compare("/"))
-				result = result / *(find(variables[i + 1]));
+			
+			{
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result - val;
+			 			}
+			 	else
+				
+					result = result - *(find(variables[i + 1]));
+			}
+
+
 			else if (!seps[i].compare("*"))
 				result = result * (*(find(variables[i + 1])));
+
+
 			else if (!seps[i].compare("/"))
 				result = result / (*find(variables[i + 1]));
+
+
 			else if (!seps[i].compare("\'"))
 				result = result.transbose();
+
+
 			 else if(!seps[i].compare("$"))
 			 		{
-				
-			 			result = (*(find(variables[i+1]))).inverse();
+			 			if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result.dotDivision(val);
+			 			}
+
+						else
+
+			 				result = result.dotDivision(*find(variables[i + 1]));
+
+			 		}
+
+			 else if(!seps[i].compare("#"))
+			 		{
+						if(isNumber(variables[i+1]))
+					 			{
+					 				double val = atof(variables[i+1].c_str());
+					 				result = result.dotProduct(val);
+					 			}
+					 		
+					 	else
+
+			 				result = result.dotProduct(*find(variables[i + 1]));
 
 			 		}
 			 

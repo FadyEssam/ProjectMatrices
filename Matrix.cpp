@@ -274,10 +274,15 @@ Matrix Matrix::dotDivision (Matrix m)
 	}
 }
 
-Matrix Matrix::operator*(double value)
+Matrix Matrix::dotProduct(double value)
 {
 
-	Matrix result = *(this);
+	Matrix result(rows,columns);
+
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = elements[i][j];
+	
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 			result[i][j] = result[i][j] * value;
@@ -288,9 +293,15 @@ Matrix Matrix::operator*(double value)
 
 
 
-Matrix Matrix::operator/(double value)
+Matrix Matrix::dotDivision(double value)
 {
-	Matrix result = *(this);
+	
+	Matrix result(rows,columns);
+
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = elements[i][j];
+
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 			result[i][j] = result[i][j] / value;
@@ -302,7 +313,13 @@ Matrix Matrix::operator/(double value)
 Matrix Matrix::operator-(double value)
 {
 
-	Matrix result = *(this);
+	
+	Matrix result(rows,columns);
+
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = elements[i][j];
+
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 			result[i][j] = result[i][j] - value;
@@ -315,7 +332,13 @@ Matrix Matrix::operator-(double value)
 
 Matrix Matrix::operator+(double value)
 {
-	Matrix result = *(this);
+	
+	Matrix result(rows,columns);
+
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			result[i][j] = elements[i][j];
+		
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 			result[i][j] = result[i][j] + value;
