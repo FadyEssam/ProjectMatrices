@@ -1,7 +1,7 @@
 #include "Matrix.h"
 #include <iostream>
 #include <ostream>
-#define DEFAULT_NAME ""
+#define DEFAULT_NAME "ans"
 
 
 Matrix::Matrix()

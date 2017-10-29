@@ -3,6 +3,6 @@ B=[1 2 3;0 1 4;5 6 0]
 D=[ 3 3 3; 3 3 3 ; 3 3  3]
 d=f=B'+1
 C = 3./B
-Z = inverse(B)
-z= 5+inverse(B)'
-l = A + inverse(B) -5+ 2 ./3 + C
+Z = inv(B)
+z= 5+inv(B)'
+l = A + inv(B) -5+ 2 ./3 + C

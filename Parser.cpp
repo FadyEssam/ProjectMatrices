@@ -389,7 +389,7 @@ int Parser::isNumber(string s)
 
 void Parser::prototypePriorities(string var)
 {
-	int positionInverse = var.find("inverse(");
+	int positionInverse = var.find("inv(");
 	int positionTransbose = var.find("\'");
 
 	if(positionInverse != -1)
@@ -397,7 +397,7 @@ void Parser::prototypePriorities(string var)
 		string original = var;
 			if(positionTransbose == (var.length()-1))
 				original.erase(var.length()-1,1);
-		original.erase(0,8);
+		original.erase(0,4);
 
 		original.erase(original.find(")"),1);
 
@@ -408,7 +408,7 @@ void Parser::prototypePriorities(string var)
 				onlyInverse.erase(var.length()-1,1);
 
 
-		Matrix* added = add(onlyInverse,originalM.getColumns(),originalM.getRows());
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
 		*added = originalM.inverse();
 
 
@@ -422,7 +422,7 @@ void Parser::prototypePriorities(string var)
 		original.erase(original.length()-1,1);
 
 		Matrix originalM = *find(original);
-		Matrix* added = add(var,originalM.getColumns(),originalM.getRows());
+		Matrix* added = findOrAdd(var,originalM.getColumns(),originalM.getRows());
 		*added = originalM.transbose();
 	}
 }
