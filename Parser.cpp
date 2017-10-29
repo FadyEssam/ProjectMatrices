@@ -401,6 +401,17 @@ void Parser::prototypePriorities(string var)
 
 		original.erase(original.find(")"),1);
 
+		if(original.find("\'")!=-1)
+		{
+			string nonInversed = original;
+		nonInversed.erase(nonInversed.length()-1,1);
+
+		Matrix nonInversedM = *find(nonInversed);
+		Matrix* added = findOrAdd(original,nonInversedM.getColumns(),nonInversedM.getRows());
+		*added = nonInversedM.transbose();
+		}
+
+
 		Matrix originalM = *find(original);
 		string onlyInverse = var;
 
