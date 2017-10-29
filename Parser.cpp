@@ -212,126 +212,139 @@ void Parser::handleLine(string line, int print)
 
 	else //it's an operation on existing matrix
 	{
-		 while(1)
-		 {
-		 	int pos = line.find("./");
-		 	if(pos==-1) break;
-		 	line.replace(pos,2,"$");
-		 }
+		//  while(1)
+		//  {
+		//  	int pos = line.find("./");
+		//  	if(pos==-1) break;
+		//  	line.replace(pos,2,"$");
+		//  }
 
-		while(1)
-		 {
-		 	int pos = line.find(".*");
-		 	if(pos==-1) break;
-		 	line.replace(pos,2,"#");
-		 }
+		// while(1)
+		//  {
+		//  	int pos = line.find(".*");
+		//  	if(pos==-1) break;
+		//  	line.replace(pos,2,"#");
+		//  }
+
+		//  while(1)
+		//  {
+		//  	int pos = line.find("inv("); int posRight;
+		//  	if(pos==-1) break;
+		//  	line.replace(pos,4,"inv[");
+		//  	posRight = line.find(")",pos);
+		//  	line.replace(posRight,1,"]");
+
+		//  }
+
+
 		 
 		line = removeAllSpaces(line);
 		string* operation;
 		split(line, "=", &operation);
-		Matrix result;
+		// Matrix result;
 
-		string* seps;
-		int numberOfSeparators;
-		string* variables;
-		int numberOfVariables;
+		// string* seps;
+		// int numberOfSeparators;
+		// string* variables;
+		// int numberOfVariables;
 
-		numberOfVariables = split(operation[1], "+-/*$#", &variables, &numberOfSeparators, &seps);
-
-
-		for(int i=0; i<numberOfVariables; i++)
-			prototypePriorities(variables[i]);
-
-		if(isNumber(variables[0])) // setting result to first variable
-		{
-			for(int i=0; i<numberOfVariables; i++)
-				if(!isNumber(variables[i]))
-				{
-					Matrix first = *find(variables[i]);
-					result.setRows(first.getRows());
-					result.setColumns(first.getColumns());
-
-					double val = atof(variables[0].c_str());
-					result.initialize(val);
-					break;
-				}
-		}
-
-		else 
-			{
-				result = *find(variables[0]);
-			}
+		// numberOfVariables = split(operation[1], "+-/*$#", &variables, &numberOfSeparators, &seps);
 
 
-		for (int i = 0; i<numberOfSeparators; i++)
-		{
-			if (!seps[i].compare("+"))
-			{
-				if(isNumber(variables[i+1]))
-			 			{
-			 				double val = atof(variables[i+1].c_str());
-			 				result = result + val;
-			 			}
-			 	else
+		// for(int i=0; i<numberOfVariables; i++)
+		// 	inverseAndTransbose(variables[i]);
+
+		// if(isNumber(variables[0])) // setting result to first variable
+		// {
+		// 	for(int i=0; i<numberOfVariables; i++)
+		// 		if(!isNumber(variables[i]))
+		// 		{
+		// 			Matrix first = *find(variables[i]);
+		// 			result.setRows(first.getRows());
+		// 			result.setColumns(first.getColumns());
+
+		// 			double val = atof(variables[0].c_str());
+		// 			result.initialize(val);
+		// 			break;
+		// 		}
+		// }
+
+		// else 
+		// 	{
+		// 		result = *find(variables[0]);
+		// 	}
+
+
+		// for (int i = 0; i<numberOfSeparators; i++)
+		// {
+		// 	if (!seps[i].compare("+"))
+		// 	{
+		// 		if(isNumber(variables[i+1]))
+		// 	 			{
+		// 	 				double val = atof(variables[i+1].c_str());
+		// 	 				result = result + val;
+		// 	 			}
+		// 	 	else
 				
-					result = result + *(find(variables[i + 1]));
-			}
+		// 			result = result + *(find(variables[i + 1]));
+		// 	}
 			
-			else if (!seps[i].compare("-"))
+		// 	else if (!seps[i].compare("-"))
 			
-			{
-				if(isNumber(variables[i+1]))
-			 			{
-			 				double val = atof(variables[i+1].c_str());
-			 				result = result - val;
-			 			}
-			 	else
+		// 	{
+		// 		if(isNumber(variables[i+1]))
+		// 	 			{
+		// 	 				double val = atof(variables[i+1].c_str());
+		// 	 				result = result - val;
+		// 	 			}
+		// 	 	else
 				
-					result = result - *(find(variables[i + 1]));
-			}
+		// 			result = result - *(find(variables[i + 1]));
+		// 	}
 
 
-			else if (!seps[i].compare("*"))
-				result = result * (*(find(variables[i + 1])));
+		// 	else if (!seps[i].compare("*"))
+		// 		result = result * (*(find(variables[i + 1])));
 
 
-			else if (!seps[i].compare("/"))
-				result = result / (*find(variables[i + 1]));
+		// 	else if (!seps[i].compare("/"))
+		// 		result = result / (*find(variables[i + 1]));
 
 
-			else if (!seps[i].compare("\'"))
-				result = result.transbose();
+		// 	else if (!seps[i].compare("\'"))
+		// 		result = result.transbose();
 
 
-			 else if(!seps[i].compare("$"))
-			 		{
-			 			if(isNumber(variables[i+1]))
-			 			{
-			 				double val = atof(variables[i+1].c_str());
-			 				result = result.dotDivision(val);
-			 			}
+		// 	 else if(!seps[i].compare("$"))
+		// 	 		{
+		// 	 			if(isNumber(variables[i+1]))
+		// 	 			{
+		// 	 				double val = atof(variables[i+1].c_str());
+		// 	 				result = result.dotDivision(val);
+		// 	 			}
 
-						else
+		// 				else
 
-			 				result = result.dotDivision(*find(variables[i + 1]));
+		// 	 				result = result.dotDivision(*find(variables[i + 1]));
 
-			 		}
+		// 	 		}
 
-			 else if(!seps[i].compare("#"))
-			 		{
-						if(isNumber(variables[i+1]))
-					 			{
-					 				double val = atof(variables[i+1].c_str());
-					 				result = result.dotProduct(val);
-					 			}
+		// 	 else if(!seps[i].compare("#"))
+		// 	 		{
+		// 				if(isNumber(variables[i+1]))
+		// 			 			{
+		// 			 				double val = atof(variables[i+1].c_str());
+		// 			 				result = result.dotProduct(val);
+		// 			 			}
 					 		
-					 	else
+		// 			 	else
 
-			 				result = result.dotProduct(*find(variables[i + 1]));
+		// 	 				result = result.dotProduct(*find(variables[i + 1]));
 
-			 		}
+		// 	 		}
 			 
-		}
+		// }
+		Matrix result = plusAndMinus(operation[1]);
 		Matrix* host = findOrAdd(operation[0], result.getRows(), result.getColumns());
 		(*host) = result;
 
@@ -345,7 +358,7 @@ void Parser::handleLine(string line, int print)
 
  void Parser::load(string filepath)
  {
- 	 ifstream file1(filepath);
+ 	 ifstream file1(filepath.c_str());
  	 string s;
  	while(getline(file1,s))
  	{
@@ -387,9 +400,9 @@ int Parser::isNumber(string s)
 }
 
 
-void Parser::prototypePriorities(string var)
+void Parser::inverseAndTransbose(string var)
 {
-	int positionInverse = var.find("inv(");
+	int positionInverse = var.find("inv[");
 	int positionTransbose = var.find("\'");
 
 	if(positionInverse != -1)
@@ -399,7 +412,7 @@ void Parser::prototypePriorities(string var)
 				original.erase(var.length()-1,1);
 		original.erase(0,4);
 
-		original.erase(original.find(")"),1);
+		original.erase(original.find("]"),1);
 
 		if(original.find("\'")!=-1)
 		{
@@ -437,3 +450,198 @@ void Parser::prototypePriorities(string var)
 		*added = originalM.transbose();
 	}
 }
+
+
+
+Matrix Parser::plusAndMinus(string line)
+{
+	 while(1)
+			 {
+			 	int pos = line.find("./");
+			 	if(pos==-1) break;
+			 	line.replace(pos,2,"$");
+			 }
+
+			while(1)
+			 {
+			 	int pos = line.find(".*");
+			 	if(pos==-1) break;
+			 	line.replace(pos,2,"#");
+			 }
+
+			 while(1)
+			 {
+			 	int pos = line.find("inv("); int posRight;
+			 	if(pos==-1) break;
+			 	line.replace(pos,4,"inv[");
+			 	posRight = line.find(")",pos);
+			 	line.replace(posRight,1,"]");
+
+			 }
+
+
+ 
+		
+		Matrix result;
+
+		string* seps;
+		int numberOfSeparators;
+		string* variables;
+		int numberOfVariables;
+
+		numberOfVariables = split(line, "+-", &variables, &numberOfSeparators, &seps);
+
+		if(isNumber(variables[0])) // setting result to first variable
+		{
+			for(int i=0; i<numberOfVariables; i++)
+				if(!isNumber(variables[i]))
+				{
+					Matrix first = mulAndDivide(variables[i]);
+					result.setRows(first.getRows());
+					result.setColumns(first.getColumns());
+
+					double val = atof(variables[0].c_str());
+					result.initialize(val);
+					break;
+				}
+		}
+
+		else( result = mulAndDivide(variables[0]));
+
+			// if(result.getRows()==0 && result.getColumns()==0) 
+			// 			{
+			// 				result.setRows(1);
+			// 				result.setColumns(1);
+			// 				double val = atof(variables[0].c_str());
+			// 				result.initialize(val);
+			// 			}
+
+
+		for (int i = 0; i<numberOfSeparators; i++)
+		{
+			if (!seps[i].compare("+"))
+			{
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result + val;
+			 			}
+			 	else
+				
+					result = result + mulAndDivide(variables[i+1]);
+			}
+			
+			else if (!seps[i].compare("-"))
+			
+			{
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result - val;
+			 			}
+			 	else
+				
+					result = result - mulAndDivide(variables[i+1]);
+			}
+
+
+			
+			 
+		}
+		return result;
+	}
+
+
+
+
+Matrix Parser::mulAndDivide(string line)
+{
+	Matrix result;
+		string* seps;
+		int numberOfSeparators;
+		string* variables;
+		int numberOfVariables;
+
+		numberOfVariables = split(line, "/*$#", &variables, &numberOfSeparators, &seps);
+
+		for(int i=0; i<numberOfVariables; i++)
+			inverseAndTransbose(variables[i]);
+
+		if(isNumber(variables[0])) // setting result to first variable
+		{
+			for(int i=0; i<numberOfVariables; i++)
+				if(!isNumber(variables[i]))
+				{
+					Matrix first = *find(variables[i]);
+					result.setRows(first.getRows());
+					result.setColumns(first.getColumns());
+
+					double val = atof(variables[0].c_str());
+					result.initialize(val);
+					break;
+				}
+		}
+
+		else 
+			{
+				result = *find(variables[0]);
+			}
+
+
+			// if(result.getRows()==0 && result.getColumns()==0) 
+			// {
+			// 	result.setRows(1);
+			// 	result.setColumns(1);
+			// 	double val = atof(variables[0].c_str());
+			// 	result.initialize(val);
+			// }
+
+			for (int i = 0; i<numberOfSeparators; i++)
+		{
+			
+			
+			if (!seps[i].compare("*"))
+				result = result * (*(find(variables[i + 1])));
+
+
+			else if (!seps[i].compare("/"))
+				result = result / (*find(variables[i + 1]));
+
+
+			 else if(!seps[i].compare("$"))
+			 		{
+			 			if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result.dotDivision(val);
+			 			}
+
+						else
+
+			 				result = result.dotDivision(*find(variables[i + 1]));
+
+			 		}
+
+			 else if(!seps[i].compare("#"))
+			 		{
+						if(isNumber(variables[i+1]))
+					 			{
+					 				double val = atof(variables[i+1].c_str());
+					 				result = result.dotProduct(val);
+					 			}
+					 		
+					 	else
+
+			 				result = result.dotProduct(*find(variables[i + 1]));
+
+			 		}
+			 
+		}
+
+
+		return result;
+		
+	}
+
+
+
