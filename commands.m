@@ -10,3 +10,5 @@ n=inv(B)
 z= 5+inv(B)'
 l = A + inv(B) -5+ A./3 + C
 xx = inv(A+ B)
+pow=1+3^3*2
+para = B.*(A./(D+2))

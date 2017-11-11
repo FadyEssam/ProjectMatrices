@@ -8,7 +8,7 @@ class Parser
 {
 private:
 	vector<Matrix*> matrices;
-	int size;
+	int splitParentheses(string s, string separators, string** result, int* numberOfSeparators, string** seps);
 	int split(string s, string separators, string** result, int* numberOfSeparators, string** seps);
 	int split(string s, string separators, string** result); // returns number of strings
 	string removeSidesSpaces(string s);
@@ -21,8 +21,11 @@ private:
 	void inverseAndTransbose(string var);
 	Matrix plusAndMinus(string line);
 	Matrix mulAndDivide(string line);
+	Matrix power(string line);
+	void deleteTemporaries();
 
 public:
+	Matrix parentheses(string line);
 	Parser();
 	void handle(string line);
 	void load(string filePath);

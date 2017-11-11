@@ -3,11 +3,10 @@
 #include <fstream>
 #define ROWS_SEPARATOR ";"
 #define COLUMN_SEPARATOR " "
-
+#define FAKE_NAME "temporaryFakeForParenthese"
 
 Parser::Parser()
 {
-	size = 0;
 }
 
 
@@ -147,7 +146,7 @@ Matrix* Parser::find(string name)
 
 {
 
-	for (int i = 0; i<size; i++)
+	for (int i = 0; i<matrices.size(); i++)
 	{
 		if (name == matrices[i]->getName())
 			return matrices[i];
@@ -162,7 +161,6 @@ Matrix* Parser::add(string name, int rows, int columns)
 	Matrix* added = new Matrix(rows, columns, name);
 
 	matrices.push_back(added);
-	size++;
 
 	return added;
 }
@@ -265,7 +263,8 @@ void Parser::handleLine(string line, int print)
 
 			 //======================================
 
-		Matrix result = plusAndMinus(operation[1]);
+		Matrix result = parentheses(operation[1]);
+		deleteTemporaries();
 		Matrix* host = findOrAdd(operation[0], result.getRows(), result.getColumns());
 		(*host) = result;
 
@@ -447,8 +446,6 @@ Matrix Parser::mulAndDivide(string line)
 
 		numberOfVariables = split(line, "/*$#", &variables, &numberOfSeparators, &seps);
 
-		for(int i=0; i<numberOfVariables; i++)
-			inverseAndTransbose(variables[i]);
 
 		if(isNumber(variables[0])) // setting result to first variable
 		{
@@ -457,7 +454,7 @@ Matrix Parser::mulAndDivide(string line)
 
 		else 
 			{
-				result = *find(variables[0]);
+				result = power(variables[0]);
 			}
 
 
@@ -477,7 +474,7 @@ Matrix Parser::mulAndDivide(string line)
 
 						else
 
-						result = result * (*(find(variables[i + 1])));
+						result = result * (power(variables[i + 1]));
 			}
 
 
@@ -492,7 +489,7 @@ Matrix Parser::mulAndDivide(string line)
 
 						else
 
-						result = result / (*(find(variables[i + 1])));
+						result = result / (power(variables[i + 1]));
 			}
 
 			 else if(!seps[i].compare("$"))
@@ -505,7 +502,7 @@ Matrix Parser::mulAndDivide(string line)
 
 						else
 
-			 				result = result.dotDivision(*find(variables[i + 1]));
+			 				result = result.dotDivision(power(variables[i + 1]));
 
 			 		}
 
@@ -519,7 +516,7 @@ Matrix Parser::mulAndDivide(string line)
 					 		
 					 	else
 
-			 				result = result.dotProduct(*find(variables[i + 1]));
+			 				result = result.dotProduct(power(variables[i + 1]));
 
 			 		}
 			 
@@ -531,4 +528,170 @@ Matrix Parser::mulAndDivide(string line)
 	}
 
 
+	Matrix Parser::power(string line)
+	{
+		Matrix result;
+		string* seps;
+		int numberOfSeparators;
+		string* variables;
+		int numberOfVariables;
 
+		numberOfVariables = split(line, "^", &variables, &numberOfSeparators, &seps);
+
+		for(int i=0; i<numberOfVariables; i++)
+			inverseAndTransbose(variables[i]);
+
+		if(isNumber(variables[0])) // setting result to first variable
+		{
+			result.setConstant(atof(variables[0].c_str()));
+		}
+
+		else 
+			{
+				result = *find(variables[0]);
+			}
+
+
+
+
+
+			for (int i = 0; i<numberOfSeparators; i++)
+		{
+			
+			
+			if (!seps[i].compare("^"))
+			{
+
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = (result^val);
+			 			}
+
+						else
+
+						result = (result ^ (*(find(variables[i + 1]))));
+			}
+
+
+		}
+
+
+		return result;
+		
+	}
+
+int Parser::splitParentheses(string s, string separators, string** result, int* numberOfSeparators, string** seps)
+{
+
+	int parentheses= 0;
+
+	int numberOfElements = 1; int counter = 0; int lastPosition = 0; int Separators = 0; int sepsCounter = 0;
+	for (int i = 0; i<s.length(); i++)
+	{
+		for (int j = 0; j<separators.length(); j++)
+		{
+			if (s[i] == separators[j])
+			{
+				numberOfElements++;
+				Separators++;
+			}
+		}
+	}
+
+	*seps = new string[Separators];
+	*result = new string[numberOfElements];
+
+	for (int i = 0; i<s.length(); i++)
+	{
+		
+
+
+		for (int j = 0; j<separators.length(); j++)
+		{
+
+		if(s[i]=='[') //skip till ']'
+		{
+			i = s.find(']',i);
+		}
+			if(s[i]=='(') parentheses++;
+			else if(s[i]==')') parentheses--;
+			if (s[i] == separators[j] && parentheses==0)
+			{
+
+				(*seps)[sepsCounter] = separators[j];
+				sepsCounter++;
+				(*result)[counter] = s.substr(lastPosition, i - lastPosition);
+				lastPosition = i + 1;
+				counter++;
+			}
+		}
+	}
+	if (lastPosition != s.length())
+	{
+		(*result)[counter] = s.substr(lastPosition);
+	}
+	else
+	{
+		counter--;
+	}
+	counter++;
+	*numberOfSeparators = Separators;
+
+	
+	for(int i=0; i<numberOfElements; i++)
+	{
+		if((*result)[i][0] == '(')
+			(*result)[i].erase(0,1);
+
+		if((*result)[i][(*result)[i].length()-1] == ')')
+			(*result)[i].erase((*result)[i].length()-1,1);
+
+	}
+	return counter;
+
+}
+
+
+Matrix Parser::parentheses(string line)
+{
+	string operation; static int temporaryNumber=0;
+	Matrix result;
+		string* seps;
+		int numberOfSeparators;
+		string* variables;
+		int numberOfVariables;
+
+		numberOfVariables = splitParentheses(line, "/*+-$#^", &variables, &numberOfSeparators, &seps);
+		Matrix *variableMatrices = new Matrix[numberOfVariables];
+		for (int i = 0; i < numberOfVariables; ++i)
+		{
+				
+			if(variables[i].find("(")!= -1)
+				variableMatrices[i] = parentheses(variables[i]);
+			else
+				variableMatrices[i] = plusAndMinus(variables[i]);
+
+			string name = string(FAKE_NAME) + to_string(temporaryNumber);
+			Matrix* temp = findOrAdd(name,variableMatrices[i].getRows(),variableMatrices[i].getColumns());
+				*temp = variableMatrices[i];
+				operation+= name;
+				
+				if(i<numberOfVariables-1)
+					operation+= seps[i];
+
+				temporaryNumber++;
+		}
+		return plusAndMinus(operation);
+
+}
+
+
+void Parser::deleteTemporaries()
+{
+	for (int i = 0; i < matrices.size(); ++i)
+	{
+		 if(matrices[i]->getName().find(FAKE_NAME)!=-1)
+		 	matrices.erase(matrices.begin()+i);
+	}
+}
