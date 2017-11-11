@@ -388,31 +388,17 @@ Matrix Parser::plusAndMinus(string line)
 
 		numberOfVariables = split(line, "+-", &variables, &numberOfSeparators, &seps);
 
+
+
 		if(isNumber(variables[0])) // setting result to first variable
 		{
-			for(int i=0; i<numberOfVariables; i++)
-				if(!isNumber(variables[i]))
-				{
-					Matrix first = mulAndDivide(variables[i]);
-					result.setRows(first.getRows());
-					result.setColumns(first.getColumns());
+			result.setConstant(atof(variables[0].c_str()));
 
-					double val = atof(variables[0].c_str());
-					result.initialize(val);
-					break;
-				}
 		}
 
-		else( result = mulAndDivide(variables[0]));
+		else result = mulAndDivide(variables[0]);
 
-			// if(result.getRows()==0 && result.getColumns()==0) 
-			// 			{
-			// 				result.setRows(1);
-			// 				result.setColumns(1);
-			// 				double val = atof(variables[0].c_str());
-			// 				result.initialize(val);
-			// 			}
-
+			
 
 		for (int i = 0; i<numberOfSeparators; i++)
 		{
@@ -466,17 +452,7 @@ Matrix Parser::mulAndDivide(string line)
 
 		if(isNumber(variables[0])) // setting result to first variable
 		{
-			for(int i=0; i<numberOfVariables; i++)
-				if(!isNumber(variables[i]))
-				{
-					Matrix first = *find(variables[i]);
-					result.setRows(first.getRows());
-					result.setColumns(first.getColumns());
-
-					double val = atof(variables[0].c_str());
-					result.initialize(val);
-					break;
-				}
+			result.setConstant(atof(variables[0].c_str()));
 		}
 
 		else 
@@ -485,25 +461,39 @@ Matrix Parser::mulAndDivide(string line)
 			}
 
 
-			// if(result.getRows()==0 && result.getColumns()==0) 
-			// {
-			// 	result.setRows(1);
-			// 	result.setColumns(1);
-			// 	double val = atof(variables[0].c_str());
-			// 	result.initialize(val);
-			// }
 
 			for (int i = 0; i<numberOfSeparators; i++)
 		{
 			
 			
 			if (!seps[i].compare("*"))
-				result = result * (*(find(variables[i + 1])));
+			{
+
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result.dotProduct(val);
+			 			}
+
+						else
+
+						result = result * (*(find(variables[i + 1])));
+			}
 
 
 			else if (!seps[i].compare("/"))
-				result = result / (*find(variables[i + 1]));
+			{
+				
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = result.dotDivision(val);
+			 			}
 
+						else
+
+						result = result / (*(find(variables[i + 1])));
+			}
 
 			 else if(!seps[i].compare("$"))
 			 		{

@@ -26,7 +26,9 @@ public:
 	int getColumns();
 	int getRows();
 	string getName();
-
+	void setConstant(double value);
+	double getConstant();
+	int isConstant();
 	//printing
 	void print();
 

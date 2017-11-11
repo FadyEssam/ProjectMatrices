@@ -63,11 +63,14 @@ void Matrix::initialize(double value)
 
 void Matrix::destroy()
 {
-
-	for (int i = 0; i<rows; i++)
+	if(elements != NULL)
+	
+	{
+		for (int i = 0; i<rows; i++)
 		delete[] elements[i];
 
-	delete[] elements;
+		delete[] elements;
+	}
 	rows = 0;
 	columns = 0;
 	elements = NULL;
@@ -118,6 +121,12 @@ void Matrix::print()
 {
 	cout<<endl<<name<<"="<<endl;
 
+	if(isConstant())
+	{
+		cout<<"\t"<<getConstant()<<endl<<endl;
+	}
+
+
 	for (int i = 0; i<rows; i++)
 	{
 		cout<<"\t";
@@ -154,6 +163,27 @@ double* Matrix::operator[](int r)
 //======================================== Arihtmatic
 Matrix Matrix::operator+ (Matrix m)
 {
+
+	if(m.isConstant())
+	{
+		return *(this)+m.getConstant();
+	}
+
+
+	if(isConstant())
+	{
+
+		if(m.isConstant())
+		{
+			return *(this)+m.getConstant();
+		}
+
+		Matrix result(m.getRows(),m.getColumns());
+		result.initialize(elements[0][0]);
+		return result+m;
+	}
+
+
 	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
 
 	else
@@ -171,6 +201,25 @@ Matrix Matrix::operator+ (Matrix m)
 
 Matrix Matrix::operator- (Matrix m)
 {
+
+	if(m.isConstant())
+	{
+		return *(this)-m.getConstant();
+	}
+
+
+	if(isConstant())
+	{
+		if(m.isConstant())
+		{
+			return *(this)-m.getConstant();
+		}
+		Matrix result(m.getRows(),m.getColumns());
+		result.initialize(elements[0][0]);
+		return result-m;
+	}
+
+
 	if ((m.rows != rows) || (m.columns != columns)) throw "You can't substract two matrices with different R,C";
 
 	else
@@ -191,7 +240,16 @@ void Matrix::operator= (Matrix m) // to make it separately editable
 {
 
 
+	
+
+	if(m.isConstant())
+	{
+		this->setConstant(m.getConstant());
+		return;
+	}
+
 	if (this->elements != NULL)this->destroy();
+	
 	rows = m.rows;
 	columns = m.columns;
 
@@ -212,6 +270,25 @@ void Matrix::operator= (Matrix m) // to make it separately editable
 
 Matrix Matrix::operator* (Matrix m) // to make it separately editable
 {
+
+	if(m.isConstant())
+	{
+		return this->dotProduct(m.getConstant());
+	}
+
+
+	if(isConstant())
+	{
+
+		if(m.isConstant())
+		{
+			return this->dotProduct(m.getConstant());
+		}
+
+		Matrix result(m.getRows(),m.getColumns());
+		result.initialize(elements[0][0]);
+		return result.dotProduct(m);
+	}
 
 	if (columns != m.rows)  throw "Functions can't be multiplied";
 
@@ -241,6 +318,26 @@ Matrix Matrix::operator* (Matrix m) // to make it separately editable
 
 Matrix Matrix::dotProduct (Matrix m)
 {
+
+	if(m.isConstant())
+	{
+		return this->dotProduct(m.getConstant());
+	}
+
+
+	if(isConstant())
+	{
+			if(m.isConstant())
+		{
+			return this->dotProduct(m.getConstant());
+		}
+
+		Matrix result(m.getRows(),m.getColumns());
+		result.initialize(elements[0][0]);
+		return result.dotProduct(m);
+	}
+
+
 	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
 
 	else
@@ -259,6 +356,24 @@ Matrix Matrix::dotProduct (Matrix m)
 
 Matrix Matrix::dotDivision (Matrix m)
 {
+	if(m.isConstant())
+	{
+		return this->dotDivision(m.getConstant());
+	}
+
+
+	if(isConstant())
+	{
+		if(m.isConstant())
+		{
+			return this->dotDivision(m.getConstant());
+		}
+
+		Matrix result(m.getRows(),m.getColumns());
+		result.initialize(elements[0][0]);
+		return result.dotDivision(m);
+	}
+
 	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
 
 	else
@@ -277,15 +392,19 @@ Matrix Matrix::dotDivision (Matrix m)
 Matrix Matrix::dotProduct(double value)
 {
 
+	if(isConstant())
+	{
+		Matrix result = *(this);
+		result.elements[0][0] *= value;
+		return result;
+	}
+
 	Matrix result(rows,columns);
 
-	for (int i = 0; i<rows; i++)
-		for (int j = 0; j<columns; j++)
-			result[i][j] = elements[i][j];
 	
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
-			result[i][j] = result[i][j] * value;
+			result[i][j] = elements[i][j] * value;
 
 
 	return result;
@@ -295,16 +414,18 @@ Matrix Matrix::dotProduct(double value)
 
 Matrix Matrix::dotDivision(double value)
 {
-	
+	if(isConstant())
+	{
+		Matrix result = *(this);
+		result.elements[0][0] /= value;
+		return result;
+	}
+
 	Matrix result(rows,columns);
 
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
-			result[i][j] = elements[i][j];
-
-	for (int i = 0; i<rows; i++)
-		for (int j = 0; j<columns; j++)
-			result[i][j] = result[i][j] / value;
+			result[i][j] = elements[i][j] / value;
 
 	return result;
 }
@@ -313,16 +434,19 @@ Matrix Matrix::dotDivision(double value)
 Matrix Matrix::operator-(double value)
 {
 
-	
+	if(isConstant())
+	{
+		Matrix result = *(this);
+		result.elements[0][0] -= value;
+		return result;
+	}
+
 	Matrix result(rows,columns);
 
-	for (int i = 0; i<rows; i++)
-		for (int j = 0; j<columns; j++)
-			result[i][j] = elements[i][j];
 
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
-			result[i][j] = result[i][j] - value;
+			result[i][j] = elements[i][j] - value;
 
 
 	return result;
@@ -332,16 +456,19 @@ Matrix Matrix::operator-(double value)
 
 Matrix Matrix::operator+(double value)
 {
-	
+	if(isConstant())
+	{
+		Matrix result = *(this);
+		result.elements[0][0] += value;
+		return result;
+	}
+
 	Matrix result(rows,columns);
 
-	for (int i = 0; i<rows; i++)
-		for (int j = 0; j<columns; j++)
-			result[i][j] = elements[i][j];
 		
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
-			result[i][j] = result[i][j] + value;
+			result[i][j] = elements[i][j] + value;
 
 	return result;
 }
@@ -349,6 +476,24 @@ Matrix Matrix::operator+(double value)
 
 Matrix Matrix::operator/ (Matrix m) // to make it separately editable
 {
+	if(m.isConstant())
+	{
+		return this->dotDivision(m.getConstant());
+	}
+
+
+	if(isConstant())
+	{
+		if(m.isConstant())
+		{
+			return this->dotDivision(m.getConstant());
+		}
+
+		Matrix result(m.getRows(),m.getColumns());
+		result.initialize(elements[0][0]);
+		return result.dotDivision(m);
+	}
+
 	Matrix tempM(rows, columns);
 
 
@@ -482,3 +627,30 @@ Matrix Matrix::inverse()
 }
 
 
+
+
+
+// constants section=================
+
+void Matrix::setConstant(double value)
+{
+	this->destroy();
+	elements = new double*;
+	elements[0] = new double;
+	elements[0][0] = value;
+}
+
+double Matrix::getConstant()
+	{
+		return elements[0][0];
+	}
+	
+
+int Matrix::isConstant()
+{
+	if( (rows == 0) && (columns == 0) && (elements != NULL))
+		return 1;
+
+	else 
+		return 0;
+}
