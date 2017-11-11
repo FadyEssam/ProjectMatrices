@@ -76,6 +76,12 @@ int Parser::split(string s, string separators, string** result, int* numberOfSep
 
 	for (int i = 0; i<s.length(); i++)
 	{
+		if(s[i]=='[') //skip till ']'
+		{
+			i = s.find(']',i);
+		}
+
+
 		for (int j = 0; j<separators.length(); j++)
 		{
 			if (s[i] == separators[j])
@@ -216,7 +222,49 @@ void Parser::handleLine(string line, int print)
 		line = removeAllSpaces(line);
 		string* operation;
 		split(line, "=", &operation);
-		
+
+		//replacing==================
+		while(1)
+			 {
+			 	int pos = operation[1].find("./");
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,2,"$");
+			 }
+
+		while(1)
+			 {
+			 	int pos = operation[1].find(".+");
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,2,"+");
+			 }
+
+
+			 while(1)
+			 {
+			 	int pos = operation[1].find(".-");
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,2,"-");
+			 }
+
+			while(1)
+			 {
+			 	int pos = operation[1].find(".*");
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,2,"#");
+			 }
+
+			 while(1)
+			 {
+			 	int pos = operation[1].find("inv("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,4,"inv[");
+			 	posRight = operation[1].find(")",pos);
+			 	operation[1].replace(posRight,1,"]");
+
+			 }
+
+			 //======================================
+
 		Matrix result = plusAndMinus(operation[1]);
 		Matrix* host = findOrAdd(operation[0], result.getRows(), result.getColumns());
 		(*host) = result;
@@ -285,23 +333,23 @@ void Parser::inverseAndTransbose(string var)
 				original.erase(var.length()-1,1);
 		original.erase(0,4);
 
-		original.erase(original.find("]"),1);
+		original.erase(original.length()-1,1);
 
-		if(original.find("\'")!=-1)
-		{
-			string nonInversed = original;
-		nonInversed.erase(nonInversed.length()-1,1);
+		// if(original.find("\'")!=-1)
+		// {
+		// 	string nonInversed = original;
+		// nonInversed.erase(nonInversed.length()-1,1);
 
-		Matrix nonInversedM = *find(nonInversed);
-		Matrix* added = findOrAdd(original,nonInversedM.getColumns(),nonInversedM.getRows());
-		*added = nonInversedM.transbose();
-		}
+		// Matrix nonInversedM = *find(nonInversed);
+		// Matrix* added = findOrAdd(original,nonInversedM.getColumns(),nonInversedM.getRows());
+		// *added = nonInversedM.transbose();
+		// }
 
 
-		Matrix originalM = *find(original);
-		string onlyInverse = var;
+		 Matrix originalM = plusAndMinus(original);
+		 string onlyInverse = var;
 
-		if(positionTransbose == (var.length()-1))
+		 if(positionTransbose == (var.length()-1))
 				onlyInverse.erase(var.length()-1,1);
 
 
@@ -328,31 +376,7 @@ void Parser::inverseAndTransbose(string var)
 
 Matrix Parser::plusAndMinus(string line)
 {
-	 while(1)
-			 {
-			 	int pos = line.find("./");
-			 	if(pos==-1) break;
-			 	line.replace(pos,2,"$");
-			 }
-
-			while(1)
-			 {
-			 	int pos = line.find(".*");
-			 	if(pos==-1) break;
-			 	line.replace(pos,2,"#");
-			 }
-
-			 while(1)
-			 {
-			 	int pos = line.find("inv("); int posRight;
-			 	if(pos==-1) break;
-			 	line.replace(pos,4,"inv[");
-			 	posRight = line.find(")",pos);
-			 	line.replace(posRight,1,"]");
-
-			 }
-
-
+	 
  
 		
 		Matrix result;

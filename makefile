@@ -1,12 +1,8 @@
 CC=g++
 Deps= main.cpp Matrix.cpp Parser.cpp
 OutputName=g16mathlab
-
-test: $(Deps)
-	$(CC) $(Deps) -o $(OutputName)
-	./$(OutputName)
 	
-build: $(Deps)
+build: $(Deps) #first make command to build 
 	$(CC) $(Deps) -o $(OutputName)
 
 run: $(OutputName)
