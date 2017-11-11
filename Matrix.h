@@ -2,6 +2,7 @@
 #define MATRIXHH
 #include<iostream>
 #include<string>
+#include <math.h>
 using namespace std;
 
 class Matrix
@@ -39,7 +40,8 @@ public:
 
 
 	//Arithmatics
-
+	Matrix operator^(Matrix m);
+	Matrix operator^(double value);
 	Matrix operator+(Matrix m);
 	void operator=(Matrix m);
 	Matrix operator-(Matrix m);

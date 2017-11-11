@@ -627,8 +627,48 @@ Matrix Matrix::inverse()
 }
 
 
+Matrix Matrix::operator^ (double value)
+{
+
+	if(value==0) return *(this);
+	
+	if(isConstant())
+	{
+		Matrix result;
+		result = *(this);
+		result[0][0] = pow(result[0][0],value);
+		return result; 
+	}
+
+	else
+	{
+		Matrix result(rows,columns);
+		for (int i = 0; i < rows; ++i)
+		{
+			for (int j = 0; j < columns; ++j)
+			{
+				result[i][j] = pow(elements[i][j],value);
+			}
+		}
+
+		return result;
+	}
+
+} 
 
 
+Matrix Matrix::operator^ (Matrix m)
+{
+	if(!m.isConstant())
+	{
+		throw "you can't have power of matrix";
+	}
+
+	else
+	{
+		return *(this) ^ m.getConstant();
+	}
+}
 
 // constants section=================
 
