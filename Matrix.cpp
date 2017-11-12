@@ -1,6 +1,7 @@
 #include "Matrix.h"
 #include <iostream>
 #include <ostream>
+#include <stdlib.h>
 #define DEFAULT_NAME "ans"
 #define MAX_RANDOM 100
 
@@ -738,7 +739,7 @@ Matrix rand(int r, int c)
 	{
 		for(int j=0; j<c; j++)
 		{
-			result[i][j] = random()%MAX_RANDOM+1;
+			result[i][j] = rand()%MAX_RANDOM+1;
 		}
 	}
 

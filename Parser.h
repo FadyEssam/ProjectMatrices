@@ -3,6 +3,10 @@
 #include <vector>
 #include "Matrix.h"
 #include <string>
+#include <sstream>
+
+#define SSTR( x ) dynamic_cast< std::ostringstream & >( \
+            ( std::ostringstream() << std::dec << x ) ).str()
 using namespace std;
 class Parser
 {
@@ -23,9 +27,9 @@ private:
 	Matrix mulAndDivide(string line);
 	Matrix power(string line);
 	void deleteTemporaries();
-	int countBrackets(string s);
 
 public:
+	int countBrackets(string s);
 	Matrix parentheses(string line);
 	Parser();
 	void handle(string line);

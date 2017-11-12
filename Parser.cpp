@@ -1,6 +1,8 @@
 #include "Parser.h"
 #include <stdlib.h>
 #include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
 #define ROWS_SEPARATOR ";"
 #define COLUMN_SEPARATOR " "
 #define FAKE_NAME "temporaryFakeForParenthese"
@@ -364,6 +366,11 @@ void Parser::handleLine(string line, int print)
 
 void Parser::handle(string line)
 {
+	if(line.find("=")==-1)
+	{
+		line = string("ans = ") + line;
+	}
+
 	int doesPrint = 1;
 	if(line[line.length()-1]==';')
 	{
@@ -759,7 +766,8 @@ Matrix Parser::parentheses(string line)
 				variableMatrices[i] = parentheses(variables[i]);
 			else
 				variableMatrices[i] = plusAndMinus(variables[i]);
-			string name = string(FAKE_NAME) + to_string(temporaryNumber);
+
+			string name = string(FAKE_NAME) + SSTR(temporaryNumber);
 			Matrix* temp = findOrAdd(name,variableMatrices[i].getRows(),variableMatrices[i].getColumns());
 				*temp = variableMatrices[i];
 
