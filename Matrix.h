@@ -12,14 +12,14 @@ private:
 	double** elements;
 	string name;
 
-
 public:
 	//essential
 	Matrix();
+	// Matrix (const Matrix &m);
+	// ~Matrix();
 	Matrix(int r, int c);
 	Matrix(int r, int c, string n);
 	void initialize(double value);
-	//void Matrix(Matrix& m);
 	void destroy();
 	void setRows(int r);
 	void setColumns(int c);
@@ -28,16 +28,16 @@ public:
 	int getRows();
 	string getName();
 	void setConstant(double value);
-	double getConstant();
-	int isConstant();
+	double getConstant() const;
+	int isConstant() const;
 	//printing
 	void print();
 
 
 	//changing values
 	void setElement(int r, int c, double value);
-	double* operator[](int r);
-
+	double* operator[](int r) const;
+	
 
 	//Arithmatics
 	Matrix operator^(Matrix m);
@@ -66,5 +66,8 @@ private:
 };
 
 ostream& operator<< (ostream & o, Matrix m);
-
+ Matrix zeros(int r, int c);
+ Matrix ones(int r, int c);
+ Matrix rand(int r, int c);
+ Matrix eye(int r, int c);
 #endif

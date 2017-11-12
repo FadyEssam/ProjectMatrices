@@ -23,6 +23,7 @@ private:
 	Matrix mulAndDivide(string line);
 	Matrix power(string line);
 	void deleteTemporaries();
+	int countBrackets(string s);
 
 public:
 	Matrix parentheses(string line);

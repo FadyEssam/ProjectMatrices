@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ostream>
 #define DEFAULT_NAME "ans"
+#define MAX_RANDOM 100
 
 
 Matrix::Matrix()
@@ -44,20 +45,33 @@ void Matrix::initialize(double value)
 			elements[i][j] = value;
 }
 
-
-// void Matrix::Matrix(Matrix& m)
+// Matrix::Matrix (const Matrix &m)
 // {
-// 	rows = m.getRows();
-// 	columns = m.getColumns();
+// 	if(m.isConstant())
+// 	{
+// 		this->setConstant(m.getConstant());
+// 		name = m.name;
+// 		return;
+// 	}
 
-// 	elements = new double* [rows];
-// 	for(int i=0; i<rows; i++)
-// 		elements[i]  =  new double[columns];
+	
+// 	rows = m.rows;
+// 	columns = m.columns;
+// 	name = m.name;
+// 	elements = new double*[rows];
+// 	for (int i = 0; i<rows; i++)
+// 		elements[i] = new double[columns];
 
-// 	for(int i=0; i<rows; i++)
-// 			for(int j=0; j<columns; j++)
-// 				elements[i][j] = m[i][j];
 
+// 	for (int i = 0; i<rows; i++)
+// 		for (int j = 0; j<columns; j++)
+// 			elements[i][j] = m[i][j];
+// }
+
+
+// Matrix::~Matrix()
+// {
+// 	 //this->destroy();
 // }
 
 
@@ -154,7 +168,7 @@ void Matrix::setElement(int r, int c, double value)
 	elements[r][c] = value;
 }
 
-double* Matrix::operator[](int r)
+double* Matrix::operator[](int r) const
 {
 	return elements[r];
 }
@@ -680,13 +694,13 @@ void Matrix::setConstant(double value)
 	elements[0][0] = value;
 }
 
-double Matrix::getConstant()
+double Matrix::getConstant() const
 	{
 		return elements[0][0];
 	}
 	
 
-int Matrix::isConstant()
+int Matrix::isConstant() const
 {
 	if( (rows == 0) && (columns == 0) && (elements != NULL))
 		return 1;
@@ -694,3 +708,61 @@ int Matrix::isConstant()
 	else 
 		return 0;
 }
+
+
+//============================================
+
+//Special matrices ===================================
+
+Matrix zeros(int r, int c)
+{
+	Matrix result(r,c);
+	result.initialize(0);
+	return result;
+}
+
+
+
+Matrix ones(int r, int c)
+{
+	Matrix result(r,c);
+	result.initialize(1);
+	return result;
+}
+
+Matrix rand(int r, int c)
+{
+	Matrix result(r,c);
+
+	for (int i = 0; i < r; ++i)
+	{
+		for(int j=0; j<c; j++)
+		{
+			result[i][j] = random()%MAX_RANDOM+1;
+		}
+	}
+
+
+	return result;
+}
+
+
+
+Matrix eye(int r, int c)
+{
+	Matrix result(r,c);
+
+	for (int i = 0; i < r; ++i)
+	{
+		for(int j=0; j< c; j++)
+		{
+
+			result[i][j] = (i==j)?1:0;
+		}
+	}
+
+
+	return result;
+}
+
+//====================================================

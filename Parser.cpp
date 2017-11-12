@@ -152,8 +152,18 @@ Matrix* Parser::find(string name)
 			return matrices[i];
 	}
 
+// int eyesPlace = name.find("eyes[");
+
+// if( eyesPlace == 0)
+// {
+// 	string first = name.substr(5,name.find(",")-5);
+// }
+
+
 	return NULL;
 }
+
+
 
 
 Matrix* Parser::add(string name, int rows, int columns)
@@ -188,6 +198,10 @@ void Parser::handleLine(string line, int print)
 		operation[1] = removeSidesSpaces(operation[1]);
 		operation[1].erase(operation[1].find("["), 1);
 		operation[1].erase(operation[1].find("]"), 1); //remove "[,]"
+
+		if(operation[1][operation[1].length()-1]==';')
+		operation[1].erase(operation[1].length()-1,1);
+
 		string* rows;
 		int numberOfRows = split(operation[1], ROWS_SEPARATOR, &rows);
 		int numberOfColumns;
@@ -216,6 +230,7 @@ void Parser::handleLine(string line, int print)
 
 	else //it's an operation on existing matrix
 	{
+
 		
 		line = removeAllSpaces(line);
 		string* operation;
@@ -261,13 +276,53 @@ void Parser::handleLine(string line, int print)
 
 			 }
 
-			 //======================================
 
+			while(1)
+			 {
+			 	int pos = operation[1].find("eye("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,4,"eye[");
+			 	posRight = operation[1].find(")",pos);
+			 	operation[1].replace(posRight,1,"]");
+
+			 }
+
+			 while(1)
+			 {
+			 	int pos = operation[1].find("zeros("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,6,"zeros[");
+			 	posRight = operation[1].find(")",pos);
+			 	operation[1].replace(posRight,1,"]");
+
+			 }
+
+
+			  while(1)
+			 {
+			 	int pos = operation[1].find("rand("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,5,"rand[");
+			 	posRight = operation[1].find(")",pos);
+			 	operation[1].replace(posRight,1,"]");
+
+			 }
+
+			 while(1)
+			 {
+			 	int pos = operation[1].find("ones("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,5,"ones[");
+			 	posRight = operation[1].find(")",pos);
+			 	operation[1].replace(posRight,1,"]");
+
+			 }
+
+			 //======================================
 		Matrix result = parentheses(operation[1]);
-		deleteTemporaries();
+		deleteTemporaries(); 
 		Matrix* host = findOrAdd(operation[0], result.getRows(), result.getColumns());
 		(*host) = result;
-
 		if (print == 1)
 			cout << (*host);
 	}
@@ -282,6 +337,22 @@ void Parser::handleLine(string line, int print)
  	 string s;
  	while(getline(file1,s))
  	{
+ 		if(s.find("[")!=-1)
+ 		{
+ 		
+ 			string s2;
+ 			while(countBrackets(s)>0) 
+ 			{
+ 				getline(file1,s2);
+ 				s+= s2;
+ 			}
+
+		}
+		for (int i = 0; i < s.length(); ++i)
+		{
+			if(s[i] == '\r' || s[i]== '\n' )
+				s.erase(i,1);
+		} 		
  		 handle(s);
  	}
 
@@ -291,6 +362,12 @@ void Parser::handleLine(string line, int print)
 
 void Parser::handle(string line)
 {
+	int doesPrint = 1;
+	if(line[line.length()-1]==';')
+	{
+		doesPrint = 0;
+		line.erase(line.length()-1);
+	}
 
 	string* sides;
 	int numberOfSides = split(line, "=", &sides);
@@ -301,7 +378,7 @@ void Parser::handle(string line)
 		handleLine(sides[i - 1] + string("=") + sides[i], 0);
 	}
 
-	handleLine(sides[0] + string("=") + sides[1], 1);
+	handleLine(sides[0] + string("=") + sides[1], doesPrint);
 
 }
 
@@ -345,7 +422,7 @@ void Parser::inverseAndTransbose(string var)
 		// }
 
 
-		 Matrix originalM = plusAndMinus(original);
+		 Matrix originalM = parentheses(original);
 		 string onlyInverse = var;
 
 		 if(positionTransbose == (var.length()-1))
@@ -670,20 +747,21 @@ Matrix Parser::parentheses(string line)
 		int numberOfSeparators;
 		string* variables;
 		int numberOfVariables;
-
-		numberOfVariables = splitParentheses(line, "/*+-$#^", &variables, &numberOfSeparators, &seps);
+		numberOfVariables = splitParentheses(line, "/*+-$#^", &variables, &numberOfSeparators, &seps); 
 		Matrix *variableMatrices = new Matrix[numberOfVariables];
+
 		for (int i = 0; i < numberOfVariables; ++i)
 		{
-				
+
+
 			if(variables[i].find("(")!= -1)
 				variableMatrices[i] = parentheses(variables[i]);
 			else
 				variableMatrices[i] = plusAndMinus(variables[i]);
-
 			string name = string(FAKE_NAME) + to_string(temporaryNumber);
 			Matrix* temp = findOrAdd(name,variableMatrices[i].getRows(),variableMatrices[i].getColumns());
 				*temp = variableMatrices[i];
+
 				operation+= name;
 				
 				if(i<numberOfVariables-1)
@@ -701,6 +779,26 @@ void Parser::deleteTemporaries()
 	for (int i = 0; i < matrices.size(); ++i)
 	{
 		 if(matrices[i]->getName().find(FAKE_NAME)!=-1)
+		 {
+		 	matrices[i]->destroy();
 		 	matrices.erase(matrices.begin()+i);
+
+		 }
 	}
 }
+
+	int Parser::countBrackets(string s)
+	{
+		int counter=0;
+
+		for (int i = 0; i < s.length(); ++i)
+		{
+			if(s[i]=='[')
+				counter++;
+
+			if(s[i]==']')
+				counter--;
+		}
+
+		return counter;
+	}
