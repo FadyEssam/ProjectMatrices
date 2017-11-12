@@ -187,11 +187,11 @@ Matrix* Parser::findOrAdd(string name, int rows, int columns)
 
 
 void Parser::handleLine(string line, int print)
-{
-
+{	
 	if (line.find("[") != -1) //it is declaring a new matrix
 	{
-		string* operation;
+		string* operation;			
+
 		split(line, "=", &operation);
 
 		operation[0] = removeAllSpaces(operation[0]);
@@ -222,6 +222,7 @@ void Parser::handleLine(string line, int print)
 				elementsCut[i][j] = removeAllSpaces(elementsCut[i][j]);
 				(*host)[i][j] = atof(elementsCut[i][j].c_str());
 			}
+
 		if (print == 1)
 			cout << (*host);
 	}
@@ -347,14 +348,15 @@ void Parser::handleLine(string line, int print)
  				s+= s2;
  			}
 
-		}
+		} 
 		for (int i = 0; i < s.length(); ++i)
 		{
 			if(s[i] == '\r' || s[i]== '\n' )
 				s.erase(i,1);
-		} 		
- 		 handle(s);
- 	}
+		} 	
+		if(s.length()!=0)
+ 		 handle(s); 
+ 	} 
 
  	 file1.close();
  }
@@ -377,7 +379,6 @@ void Parser::handle(string line)
 	{
 		handleLine(sides[i - 1] + string("=") + sides[i], 0);
 	}
-
 	handleLine(sides[0] + string("=") + sides[1], doesPrint);
 
 }
