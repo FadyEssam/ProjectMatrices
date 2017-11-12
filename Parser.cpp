@@ -591,13 +591,22 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 	{
 		for (int j = 0; j<separators.length(); j++)
 		{
-			if (s[i] == separators[j])
+
+		if(s[i]=='[') //skip till ']'
+		{
+			i = s.find(']',i);
+		}
+			if(s[i]=='(') parentheses++;
+			else if(s[i]==')') parentheses--;
+			if (s[i] == separators[j] && parentheses==0)
 			{
 				numberOfElements++;
 				Separators++;
 			}
 		}
 	}
+
+	parentheses = 0;
 
 	*seps = new string[Separators];
 	*result = new string[numberOfElements];
