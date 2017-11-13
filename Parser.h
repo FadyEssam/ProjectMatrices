@@ -27,10 +27,13 @@ private:
 	Matrix power(string line);
 	void deleteTemporaries();
 	Matrix parentheses(string line);
-
+	Matrix commasAndSpaces(string s);
+	Matrix semiColumns(string s);
+	string replace(string operation);
 
 public:
 	Parser();
+	int splitBrackets(string s, string separators, string** result);
 	string removeSidesSpaces(string s);
 	void handle(string line);
 	void load(string filePath);

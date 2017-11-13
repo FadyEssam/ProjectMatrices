@@ -8,8 +8,9 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
 
-	Parser parser;
+	Parser parser; 
 
+ 
 	if(argc>1)
 
 		{

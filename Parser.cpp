@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #define ROWS_SEPARATOR ";"
-#define COLUMN_SEPARATOR " "
+#define COLUMN_SEPARATOR ", "
 #define FAKE_NAME "temporaryFakeForParenthese"
 
 Parser::Parser()
@@ -280,33 +280,35 @@ void Parser::handleLine(string line, int print)
 
 		operation[0] = removeAllSpaces(operation[0]);
 		operation[1] = removeSidesSpaces(operation[1]);
-		operation[1].erase(operation[1].find("["), 1);
-		operation[1].erase(operation[1].find("]"), 1); //remove "[,]"
+		// operation[1].erase(operation[1].find("["), 1);
+		// operation[1].erase(operation[1].find("]"), 1); //remove "[,]"
 
-		if(operation[1][operation[1].length()-1]==';')
-		operation[1].erase(operation[1].length()-1,1);
+		// if(operation[1][operation[1].length()-1]==';')
+		// operation[1].erase(operation[1].length()-1,1);
 
-		string* rows;
-		int numberOfRows = split(operation[1], ROWS_SEPARATOR, &rows);
-		int numberOfColumns;
-		string** elementsCut= new string* [numberOfRows];
+		// string* rows;
+		// int numberOfRows = split(operation[1], ROWS_SEPARATOR, &rows);
+		// int numberOfColumns;
+		// string** elementsCut= new string* [numberOfRows];
 
 
-		for (int i = 0; i<numberOfRows; i++)
-		{
-			rows[i] = removeSidesSpaces(rows[i]);
-			numberOfColumns = split(rows[i], COLUMN_SEPARATOR, &(elementsCut[i]));
-		}
-
-		Matrix* host = findOrAdd(operation[0], numberOfRows, numberOfColumns);
-		host->setRows(numberOfRows);
-		host->setColumns(numberOfColumns);
-		for (int i = 0; i<numberOfRows; i++)
-			for (int j = 0; j<numberOfColumns; j++)
-			{
-				elementsCut[i][j] = removeAllSpaces(elementsCut[i][j]);
-				(*host)[i][j] = atof(elementsCut[i][j].c_str());
-			}
+		// for (int i = 0; i<numberOfRows; i++)
+		// {
+		// 	rows[i] = removeSidesSpaces(rows[i]);
+		// 	numberOfColumns = split(rows[i], COLUMN_SEPARATOR, &(elementsCut[i]));
+		// }
+		Matrix temp = semiColumns(operation[1]);
+		Matrix* host = findOrAdd(operation[0], temp.getRows(), temp.getColumns());
+		(*host) = temp;
+		temp.destroy();
+		// host->setRows(numberOfRows);
+		// host->setColumns(numberOfColumns);
+		// for (int i = 0; i<numberOfRows; i++)
+		// 	for (int j = 0; j<numberOfColumns; j++)
+		// 	{
+		// 		elementsCut[i][j] = removeAllSpaces(elementsCut[i][j]);
+		// 		(*host)[i][j] = atof(elementsCut[i][j].c_str());
+		// 	}
 
 		if (print == 1)
 			cout << (*host);
@@ -323,209 +325,7 @@ void Parser::handleLine(string line, int print)
 		split(line, "=", &operation);
 
 		//replacing==================
-		while(1)
-			 {
-			 	int pos = operation[1].find("./");
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,2,"$");
-			 }
-
-
-			 while(1)
-			 {
-			 	int pos = operation[1].find(".^");
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,2,"%");
-			 }
-
-		while(1)
-			 {
-			 	int pos = operation[1].find(".+");
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,2,"+");
-			 }
-
-
-			 while(1)
-			 {
-			 	int pos = operation[1].find(".-");
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,2,"-");
-			 }
-
-			while(1)
-			 {
-			 	int pos = operation[1].find(".*");
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,2,"#");
-			 }
-
-			 while(1)
-			 {
-			 	int pos = operation[1].find("inv("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,4,"inv[");
-			 	int parentheses = 1;
-			 	for (int i = pos+1; i < operation[1].length(); ++i)
-			 	{
-			 		if(operation[1][i] == '(')
-			 			parentheses++;
-			 		if(operation[1][i] == ')')
-			 			parentheses--;
-
-			 		if(parentheses==0)
-			 		{
-			 			pos = i;
-			 			break;
-			 		}
-			 	}
-
-			 	
-			 	operation[1].replace(pos,1,"]");
-
-			 }
-
-
-			while(1)
-			 {
-			 	int pos = operation[1].find("eye("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,4,"eye[");
-			 	posRight = operation[1].find(")",pos);
-			 	operation[1].replace(posRight,1,"]");
-
-			 }
-
-			 while(1)
-			 {
-			 	int pos = operation[1].find("zeros("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,6,"zeros[");
-			 	posRight = operation[1].find(")",pos);
-			 	operation[1].replace(posRight,1,"]");
-
-			 }
-
-
-			  while(1)
-			 {
-			 	int pos = operation[1].find("rand("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,5,"rand[");
-			 	posRight = operation[1].find(")",pos);
-			 	operation[1].replace(posRight,1,"]");
-
-			 }
-
-			 while(1)
-			 {
-			 	int pos = operation[1].find("ones("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,5,"ones[");
-			 	posRight = operation[1].find(")",pos);
-			 	operation[1].replace(posRight,1,"]");
-
-			 }
-
-
-			 while(1)
-			 {
-			 	int pos = operation[1].find("sqrt("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,5,"sqrt[");
-			 	int parentheses = 1;
-			 	for (int i = pos+1; i < operation[1].length(); ++i)
-			 	{
-			 		if(operation[1][i] == '(')
-			 			parentheses++;
-			 		if(operation[1][i] == ')')
-			 			parentheses--;
-
-			 		if(parentheses==0)
-			 		{
-			 			pos = i;
-			 			break;
-			 		}
-			 	}
-
-			 	
-			 	operation[1].replace(pos,1,"]");
-			 }
-
-			  while(1)
-			 {
-			 	int pos = operation[1].find("sin("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,4,"sin[");
-
-			 	int parentheses = 1;
-			 	for (int i = pos+1; i < operation[1].length(); ++i)
-			 	{
-			 		if(operation[1][i] == '(')
-			 			parentheses++;
-			 		if(operation[1][i] == ')')
-			 			parentheses--;
-
-			 		if(parentheses==0)
-			 		{
-			 			pos = i;
-			 			break;
-			 		}
-			 	}
-
-			 	
-			 	operation[1].replace(pos,1,"]");
-			 }
-
-			  while(1)
-			 {
-			 	int pos = operation[1].find("cos("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,4,"cos[");
-			 	int parentheses = 1;
-			 	for (int i = pos+1; i < operation[1].length(); ++i)
-			 	{
-			 		if(operation[1][i] == '(')
-			 			parentheses++;
-			 		if(operation[1][i] == ')')
-			 			parentheses--;
-
-			 		if(parentheses==0)
-			 		{
-			 			pos = i;
-			 			break;
-			 		}
-			 	}
-
-			 	
-			 	operation[1].replace(pos,1,"]");
-
-			 }
-
-			  while(1)
-			 {
-			 	int pos = operation[1].find("tan("); int posRight;
-			 	if(pos==-1) break;
-			 	operation[1].replace(pos,4,"tan[");
-			 	int parentheses = 1;
-			 	for (int i = pos+1; i < operation[1].length(); i++)
-			 	{
-			 		if(operation[1][i] == '(')
-			 			parentheses++;
-			 		if(operation[1][i] == ')')
-			 			parentheses--;
-
-			 		if(parentheses==0)
-			 		{
-			 			pos = i;
-			 			break;
-			 		}
-			 	}
-
-			 	
-			 	operation[1].replace(pos,1,"]");
-			 }
-
+		operation[1] = replace(operation[1]);
 			 //======================================
 		Matrix result = parentheses(operation[1]);
 		deleteTemporaries(); 
@@ -1137,3 +937,335 @@ void Parser::deleteTemporaries()
 
 		return counter;
 	}
+
+
+int Parser::splitBrackets(string s, string separators, string** result)
+{
+	int numberOfElements = 1; int counter = 0; int lastPosition = 0; int brackets = 0;
+	for (int i = 0; i<s.length(); i++)
+	{
+		if(s[i] == '[') brackets++; 
+			if(s[i] == ']') brackets--; 
+
+		for (int j = 0; j<separators.length(); j++)
+		{
+			
+
+			if (s[i] == separators[j] && brackets==0 && separators.find(s[i-1])==-1)
+			{
+				numberOfElements++;
+			}
+		}
+	}
+
+	brackets = 0;
+	*result = new string[numberOfElements];
+
+	for (int i = 0; i<s.length(); i++)
+	{
+		if(s[i] == '[') brackets++;  
+			if(s[i] == ']') brackets--;
+		for (int j = 0; j<separators.length(); j++)
+		{
+			
+
+			if ((s[i] == separators[j]) && (brackets==0) && separators.find(s[i-1])==-1)
+			{
+
+				(*result)[counter] = s.substr(lastPosition, i - lastPosition);
+				lastPosition = i + 1;
+				counter++;
+				
+			}
+		}
+	}
+	if (lastPosition != s.length())
+	{
+		(*result)[counter] = s.substr(lastPosition);
+	}
+	else
+	{
+		counter--;
+	}
+	counter++;
+
+	return counter;
+}
+
+
+Matrix Parser::semiColumns(string s)
+{
+	s = removeSidesSpaces(s);
+	s.erase(0,1); //delete [
+	if(s[s.length()]==']')
+	s.erase(s.length()-1,1); //delete ]
+	if(s[s.length()-1==';'])
+		s.erase(s.length()-1,1);   
+
+	string* rows; // el rows b3d ma tt2ta3 
+	int numberOfRows;
+	string separators = ROWS_SEPARATOR;
+	Matrix result,temp; 
+
+	numberOfRows = splitBrackets(s,separators,&rows);  
+
+
+
+	for (int i = 0; i < numberOfRows; ++i)
+	{
+		rows[i] = removeSidesSpaces(rows[i]);
+		temp = commasAndSpaces(rows[i]);
+		result.stickToBottom(temp);
+
+	}
+	temp.destroy();
+
+	return result;
+}
+
+
+Matrix Parser::commasAndSpaces(string s)
+{
+	string* columns;
+	int numberOfColumns;
+	string separators = COLUMN_SEPARATOR;
+	Matrix result,temp;
+
+	numberOfColumns = splitBrackets(s,separators,&columns);
+
+	
+	for (int i = 0; i < numberOfColumns; ++i)
+	{
+		columns[i] = removeSidesSpaces(columns[i]);
+
+		if(columns[i].find("[")!=-1)
+			temp = semiColumns(columns[i]);
+
+		else 
+		{ 
+			columns[i] = replace(columns[i]);
+			temp = parentheses(columns[i]);
+		}
+
+		result.stickToSide(temp);
+	}
+
+	temp.destroy();
+	return result;
+
+}
+
+
+
+string Parser::replace(string operation)
+{
+//replacing==================
+		while(1)
+			 {
+			 	int pos = operation.find("./");
+			 	if(pos==-1) break;
+			 	operation.replace(pos,2,"$");
+			 }
+
+
+			 while(1)
+			 {
+			 	int pos = operation.find(".^");
+			 	if(pos==-1) break;
+			 	operation.replace(pos,2,"%");
+			 }
+
+		while(1)
+			 {
+			 	int pos = operation.find(".+");
+			 	if(pos==-1) break;
+			 	operation.replace(pos,2,"+");
+			 }
+
+
+			 while(1)
+			 {
+			 	int pos = operation.find(".-");
+			 	if(pos==-1) break;
+			 	operation.replace(pos,2,"-");
+			 }
+
+			while(1)
+			 {
+			 	int pos = operation.find(".*");
+			 	if(pos==-1) break;
+			 	operation.replace(pos,2,"#");
+			 }
+
+			 while(1)
+			 {
+			 	int pos = operation.find("inv("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"inv[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+
+			 }
+
+
+			while(1)
+			 {
+			 	int pos = operation.find("eye("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"eye[");
+			 	posRight = operation.find(")",pos);
+			 	operation.replace(posRight,1,"]");
+
+			 }
+
+			 while(1)
+			 {
+			 	int pos = operation.find("zeros("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,6,"zeros[");
+			 	posRight = operation.find(")",pos);
+			 	operation.replace(posRight,1,"]");
+
+			 }
+
+
+			  while(1)
+			 {
+			 	int pos = operation.find("rand("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,5,"rand[");
+			 	posRight = operation.find(")",pos);
+			 	operation.replace(posRight,1,"]");
+
+			 }
+
+			 while(1)
+			 {
+			 	int pos = operation.find("ones("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,5,"ones[");
+			 	posRight = operation.find(")",pos);
+			 	operation.replace(posRight,1,"]");
+
+			 }
+
+
+			 while(1)
+			 {
+			 	int pos = operation.find("sqrt("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,5,"sqrt[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+			 }
+
+			  while(1)
+			 {
+			 	int pos = operation.find("sin("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"sin[");
+
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+			 }
+
+			  while(1)
+			 {
+			 	int pos = operation.find("cos("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"cos[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+
+			 }
+
+			  while(1)
+			 {
+			 	int pos = operation.find("tan("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"tan[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); i++)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+			 }
+
+			 //======================================
+
+
+			 return operation;
+}
+

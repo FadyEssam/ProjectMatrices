@@ -678,7 +678,7 @@ Matrix Matrix::dotPower (double value)
 
 Matrix Matrix::operator^(double value)
 {
-
+	value = round(value);
 	if(value==0) return *(this);
 	
 	if(isConstant())
@@ -920,4 +920,183 @@ Matrix eye(int r, int c)
 	return result;
 }
 
+//====================================================
+
+//subMatrix===========================================
+
+void Matrix::stickToSide(Matrix m)
+{
+	if(rows==0 && columns==0 && elements==NULL)
+	{
+		(*this) = m;
+		return;
+	}
+
+
+
+
+	if(isConstant())
+	{
+
+			if(m.isConstant())
+			{
+
+				Matrix result(1,2);
+				result[0][0] = elements[0][0];
+				result[0][1] = m.getConstant();
+
+				(*this) = result;
+				return;
+			}
+
+
+
+
+					else
+			{
+				if(m.rows!=1) throw "invalid dimensions";
+
+				Matrix result(1,1+m.columns);
+
+				result[0][0] = elements[0][0];
+				for (int i = 1; i < m.columns+1; ++i)
+				{
+					result[0][i] = m[0][i-1];
+				}
+
+				(*this) = result;
+				return;
+			}
+	}
+
+
+
+	if(m.isConstant())
+	{
+		if(rows!=1) throw "invalid dimensions";
+
+		Matrix result(rows,columns+1);
+		for (int i = 0; i <columns; i++)
+		{
+			result[0][i] = elements[0][i];
+		}
+
+		result[0][columns] = m.getConstant();
+		(*this) = result;
+		return;
+	}
+
+
+
+	else
+	{
+		if(rows != m.rows) throw "invalid dimensions";
+
+		Matrix result(rows,columns+m.columns);
+
+		for (int i = 0; i < rows; ++i)
+		{
+			for (int j = 0; j < columns+m.columns; ++j)
+			{
+				if(j<columns)
+					result[i][j] = elements[i][j];
+				else
+					result[i][j] =  m[i][j-columns];
+			}
+		}
+
+		(*this) = result;
+		return;
+	}
+
+
+
+}
+
+
+void Matrix::stickToBottom(Matrix m)
+{
+	if(rows==0 && columns==0 && elements==NULL)
+	{
+		(*this) = m;
+		return;
+	}
+
+	if(isConstant())
+	{
+
+			if(m.isConstant())
+			{
+
+				Matrix result(2,1);
+				result[0][0] = elements[0][0];
+				result[1][0] = m.getConstant();
+
+				(*this) = result;
+				return;
+			}
+
+
+
+
+					else
+			{
+				if(m.columns!=1) throw "invalid dimensions";
+
+				Matrix result(1+m.rows,1);
+
+				result[0][0] = elements[0][0];
+				for (int i = 1; i < m.rows+1; ++i)
+				{
+					result[i][0] = m[i-1][0];
+				}
+
+				(*this) = result;
+				return;
+			}
+	}
+
+
+
+	if(m.isConstant())
+	{
+		if(columns!=1) throw "invalid dimensions";
+
+		Matrix result(rows+1,columns);
+		for (int i = 0; i <rows; i++)
+		{
+			result[i][0] = elements[i][0];
+		}
+
+		result[rows][0] = m.getConstant();
+		(*this) = result;
+		return;
+	}
+
+
+
+	else
+	{
+		if(columns != m.columns) throw "invalid dimensions";
+
+		Matrix result(rows+m.rows,columns);
+
+		for (int i = 0; i < rows+m.rows; ++i)
+		{
+			for (int j = 0; j < columns; ++j)
+			{
+				if(i<rows)
+					result[i][j] = elements[i][j];
+				else
+					result[i][j] =  m[i-rows][j];
+			}
+		}
+
+		(*this) = result;
+		return;
+	}
+
+
+
+}
 //====================================================

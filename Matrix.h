@@ -36,6 +36,8 @@ public:
 	//changing values
 	void setElement(int r, int c, double value);
 	double* operator[](int r) const;
+	void stickToSide(Matrix m);
+	void stickToBottom(Matrix m);
 	
 
 	//Arithmatics
@@ -62,6 +64,7 @@ public:
 	Matrix msin();
 	Matrix mcos();
 	Matrix mtan();
+
 
 
 
