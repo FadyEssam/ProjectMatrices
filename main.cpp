@@ -1,11 +1,13 @@
 #include <iostream>
 #include "Matrix.h"
 #include "Parser.h"
+#include<cmath>
 using namespace std;
 
 
 int main(int argc, char const *argv[])
 {
+
 	Parser parser;
 
 	if(argc>1)

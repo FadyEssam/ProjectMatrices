@@ -2,7 +2,6 @@
 #define MATRIXHH
 #include<iostream>
 #include<string>
-#include <math.h>
 using namespace std;
 
 class Matrix
@@ -56,6 +55,12 @@ public:
 	Matrix operator+(double value);
 	Matrix dotProduct(Matrix m);
 	Matrix dotDivision(Matrix m);
+	Matrix dotPower(Matrix m);
+	Matrix dotPower(double value);
+	Matrix msqrt();
+	Matrix msin();
+	Matrix mcos();
+	Matrix mtan();
 
 
 

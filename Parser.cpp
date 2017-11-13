@@ -116,7 +116,7 @@ string Parser::removeSidesSpaces(string s)
 {
 	int start = 0;
 	for (int i = 0; i<s.length(); i++)
-		if (s[i] == ' ')
+		if (s[i] == ' ' || s[i]== '\t')
 			start++;
 		else break;
 
@@ -125,7 +125,7 @@ string Parser::removeSidesSpaces(string s)
 		string result = s.substr(start);
 
 		for (int i = result.length() - 1; i >= 0; i--)
-			if (result[i] == ' ')
+			if (result[i] == ' ' || result[i] == '\t')
 				result.erase(i, 1);
 			else break;
 
@@ -137,7 +137,7 @@ string Parser::removeSidesSpaces(string s)
 string Parser::removeAllSpaces(string s)
 {
 	for (int i = s.length() - 1; i >= 0; i--)
-		if (s[i] == ' ')
+		if (s[i] == ' ' || s[i]=='\t')
 			s.erase(i, 1);
 
 	return s;
@@ -154,12 +154,91 @@ Matrix* Parser::find(string name)
 			return matrices[i];
 	}
 
-// int eyesPlace = name.find("eyes[");
+int eyesPlace = name.find("eye[");
 
-// if( eyesPlace == 0)
-// {
-// 	string first = name.substr(5,name.find(",")-5);
-// }
+if( eyesPlace == 0)
+{
+	string s = name.substr(4);
+	string first = s.substr(0,s.find(","));
+	string second = s.substr(s.find(",")+1);
+	removeAllSpaces(first);
+	removeAllSpaces(second);
+	int r = atoi(first.c_str());
+	int c = atoi(second.c_str());
+
+	Matrix* added = new Matrix;
+	*added = eye(r,c);
+	added->setName(name);
+	matrices.push_back(added);
+	return added;
+
+}
+
+
+
+int zerosPlace = name.find("zeros[");
+
+if( zerosPlace == 0)
+{
+	string s = name.substr(6);
+	string first = s.substr(0,s.find(","));
+	string second = s.substr(s.find(",")+1);
+	removeAllSpaces(first);
+	removeAllSpaces(second);
+	int r = atoi(first.c_str());
+	int c = atoi(second.c_str());
+
+	Matrix* added = new Matrix;
+	*added = zeros(r,c);
+	added->setName(name);
+	matrices.push_back(added);
+	return added;
+
+}
+
+
+
+int onesPlace = name.find("ones[");
+
+if( onesPlace == 0)
+{
+	string s = name.substr(5);
+	string first = s.substr(0,s.find(","));
+	string second = s.substr(s.find(",")+1);
+	removeAllSpaces(first);
+	removeAllSpaces(second);
+	int r = atoi(first.c_str());
+	int c = atoi(second.c_str());
+
+	Matrix* added = new Matrix;
+	*added = ones(r,c);
+	added->setName(name);
+	matrices.push_back(added);
+	return added;
+
+}
+
+
+int randPlace = name.find("rand[");
+
+if( randPlace == 0)
+{
+	string s = name.substr(5);
+	string first = s.substr(0,s.find(","));
+	string second = s.substr(s.find(",")+1);
+	removeAllSpaces(first);
+	removeAllSpaces(second);
+	int r = atoi(first.c_str());
+	int c = atoi(second.c_str());
+
+	Matrix* added = new Matrix;
+	*added = rand(r,c);
+	added->setName(name);
+	matrices.push_back(added);
+	return added;
+
+}
+
 
 
 	return NULL;
@@ -217,7 +296,8 @@ void Parser::handleLine(string line, int print)
 		}
 
 		Matrix* host = findOrAdd(operation[0], numberOfRows, numberOfColumns);
-
+		host->setRows(numberOfRows);
+		host->setColumns(numberOfColumns);
 		for (int i = 0; i<numberOfRows; i++)
 			for (int j = 0; j<numberOfColumns; j++)
 			{
@@ -247,6 +327,14 @@ void Parser::handleLine(string line, int print)
 			 	operation[1].replace(pos,2,"$");
 			 }
 
+
+			 while(1)
+			 {
+			 	int pos = operation[1].find(".^");
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,2,"%");
+			 }
+
 		while(1)
 			 {
 			 	int pos = operation[1].find(".+");
@@ -274,8 +362,23 @@ void Parser::handleLine(string line, int print)
 			 	int pos = operation[1].find("inv("); int posRight;
 			 	if(pos==-1) break;
 			 	operation[1].replace(pos,4,"inv[");
-			 	posRight = operation[1].find(")",pos);
-			 	operation[1].replace(posRight,1,"]");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation[1].length(); ++i)
+			 	{
+			 		if(operation[1][i] == '(')
+			 			parentheses++;
+			 		if(operation[1][i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation[1].replace(pos,1,"]");
 
 			 }
 
@@ -319,6 +422,105 @@ void Parser::handleLine(string line, int print)
 			 	posRight = operation[1].find(")",pos);
 			 	operation[1].replace(posRight,1,"]");
 
+			 }
+
+
+			 while(1)
+			 {
+			 	int pos = operation[1].find("sqrt("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,5,"sqrt[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation[1].length(); ++i)
+			 	{
+			 		if(operation[1][i] == '(')
+			 			parentheses++;
+			 		if(operation[1][i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation[1].replace(pos,1,"]");
+			 }
+
+			  while(1)
+			 {
+			 	int pos = operation[1].find("sin("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,4,"sin[");
+
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation[1].length(); ++i)
+			 	{
+			 		if(operation[1][i] == '(')
+			 			parentheses++;
+			 		if(operation[1][i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation[1].replace(pos,1,"]");
+			 }
+
+			  while(1)
+			 {
+			 	int pos = operation[1].find("cos("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,4,"cos[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation[1].length(); ++i)
+			 	{
+			 		if(operation[1][i] == '(')
+			 			parentheses++;
+			 		if(operation[1][i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation[1].replace(pos,1,"]");
+
+			 }
+
+			  while(1)
+			 {
+			 	int pos = operation[1].find("tan("); int posRight;
+			 	if(pos==-1) break;
+			 	operation[1].replace(pos,4,"tan[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation[1].length(); i++)
+			 	{
+			 		if(operation[1][i] == '(')
+			 			parentheses++;
+			 		if(operation[1][i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation[1].replace(pos,1,"]");
 			 }
 
 			 //======================================
@@ -397,7 +599,7 @@ int Parser::isNumber(string s)
 	for (int i = 0; i < s.length(); ++i)
 	{
 		
-		if(!(  (s[i]>47 && s[i]<58) || s[i]=='.') )
+		if(!(  (s[i]>47 && s[i]<58) || s[i]=='.' || s[i]== '-') )
 			{return 0;}
 	}
 
@@ -406,11 +608,15 @@ int Parser::isNumber(string s)
 
 
 void Parser::inverseAndTransbose(string var)
-{
+{ 
 	int positionInverse = var.find("inv[");
-	int positionTransbose = var.find("\'");
+	int positionSqrt = var.find("sqrt[");
+	int positionSin = var.find("sin[");
+	int positionCos = var.find("cos[");
+	int positionTan = var.find("tan[");
+	int positionTransbose = var.rfind("\'");
 
-	if(positionInverse != -1)
+	if(positionInverse == 0)
 	{
 		string original = var;
 			if(positionTransbose == (var.length()-1))
@@ -418,17 +624,6 @@ void Parser::inverseAndTransbose(string var)
 		original.erase(0,4);
 
 		original.erase(original.length()-1,1);
-
-		// if(original.find("\'")!=-1)
-		// {
-		// 	string nonInversed = original;
-		// nonInversed.erase(nonInversed.length()-1,1);
-
-		// Matrix nonInversedM = *find(nonInversed);
-		// Matrix* added = findOrAdd(original,nonInversedM.getColumns(),nonInversedM.getRows());
-		// *added = nonInversedM.transbose();
-		// }
-
 
 		 Matrix originalM = parentheses(original);
 		 string onlyInverse = var;
@@ -439,6 +634,99 @@ void Parser::inverseAndTransbose(string var)
 
 		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
 		*added = originalM.inverse();
+
+
+
+	}
+
+	else if(positionSqrt == 0)
+	{	
+		string original = var; 		
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1);
+		original.erase(0,5);
+
+		original.erase(original.length()-1,1); 
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.msqrt();
+
+
+	}
+
+	else if(positionSin == 0)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1);
+		original.erase(0,4);  
+
+		original.erase(original.length()-1,1);
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.msin();
+
+
+
+	}
+
+
+	else if(positionCos == 0)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1);
+		original.erase(0,4);  
+
+		original.erase(original.length()-1,1);
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.mcos();
+
+
+
+	}
+
+
+else if(positionTan == 0)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1); 
+		original.erase(0,4);  
+
+		original.erase(original.length()-1,1);
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.mtan();
 
 
 
@@ -621,7 +909,7 @@ Matrix Parser::mulAndDivide(string line)
 		string* variables;
 		int numberOfVariables;
 
-		numberOfVariables = split(line, "^", &variables, &numberOfSeparators, &seps);
+		numberOfVariables = split(line, "^%", &variables, &numberOfSeparators, &seps);
 
 		for(int i=0; i<numberOfVariables; i++)
 			inverseAndTransbose(variables[i]);
@@ -657,6 +945,23 @@ Matrix Parser::mulAndDivide(string line)
 
 						result = (result ^ (*(find(variables[i + 1]))));
 			}
+
+
+
+			if (!seps[i].compare("%"))
+			{
+
+				if(isNumber(variables[i+1]))
+			 			{
+			 				double val = atof(variables[i+1].c_str());
+			 				result = (result.dotPower(val));
+			 			}
+
+						else
+
+						result = (result.dotPower((*(find(variables[i + 1])))));
+			}
+
 
 
 		}
@@ -748,7 +1053,7 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 
 
 Matrix Parser::parentheses(string line)
-{
+{ 
 	string operation; static int temporaryNumber=0;
 	Matrix result;
 		string* seps;
@@ -760,9 +1065,17 @@ Matrix Parser::parentheses(string line)
 
 		for (int i = 0; i < numberOfVariables; ++i)
 		{
+			int num=0;// 3shan tfawet eli gwa [  ]
+			for (int j = 0; j < variables[i].length(); ++j)
+			{
+				if(variables[i][j]=='[')
+					j = variables[i].find("]",i);
+				if(variables[i][j] == '(' || variables[i][j]==')')
+					num ++;
 
+			}
 
-			if(variables[i].find("(")!= -1)
+			if(num!= 0)
 				variableMatrices[i] = parentheses(variables[i]);
 			else
 				variableMatrices[i] = plusAndMinus(variables[i]);

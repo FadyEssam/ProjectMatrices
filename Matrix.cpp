@@ -2,8 +2,11 @@
 #include <iostream>
 #include <ostream>
 #include <stdlib.h>
+#include <cmath>
 #define DEFAULT_NAME "ans"
 #define MAX_RANDOM 100
+#define TAN(x) (sin(x)/cos(x))
+
 
 
 Matrix::Matrix()
@@ -94,6 +97,7 @@ void Matrix::destroy()
 
 void Matrix::setRows(int r)
 {
+	this->destroy();
 	rows = r;
 	elements = new double*[rows];
 
@@ -642,7 +646,7 @@ Matrix Matrix::inverse()
 }
 
 
-Matrix Matrix::operator^ (double value)
+Matrix Matrix::dotPower (double value)
 {
 
 	if(value==0) return *(this);
@@ -672,6 +676,34 @@ Matrix Matrix::operator^ (double value)
 } 
 
 
+Matrix Matrix::operator^(double value)
+{
+
+	if(value==0) return *(this);
+	
+	if(isConstant())
+	{
+		Matrix result;
+		result = *(this);
+		result[0][0] = pow(result[0][0],value);
+		return result; 
+	}
+
+	else
+	{
+		Matrix result;
+		result.setConstant(1);
+		for (int i = 0; i < value; ++i)
+		{
+			result = result*(*this);
+		}
+
+		return result;
+	}
+
+} 
+
+
 Matrix Matrix::operator^ (Matrix m)
 {
 	if(!m.isConstant())
@@ -681,8 +713,120 @@ Matrix Matrix::operator^ (Matrix m)
 
 	else
 	{
-		return *(this) ^ m.getConstant();
+		return (*(this))^(m.getConstant());
 	}
+}
+
+Matrix Matrix::dotPower (Matrix m)
+{
+	if(!m.isConstant())
+	{
+		throw "you can't have power of matrix";
+	}
+
+	else
+	{
+		return (*(this)).dotPower(m.getConstant());
+	}
+}
+
+
+Matrix Matrix::msqrt()
+{
+	if(isConstant())
+	{
+		Matrix result;
+		result.setConstant( sqrt(this->getConstant()) );
+		return result;
+	}
+
+
+	Matrix result(rows,columns);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			result[i][j] = pow(elements[i][j],0.5);
+		}
+	}
+
+	return result;
+}
+
+
+Matrix Matrix::msin()
+{
+	if(isConstant())
+	{
+		Matrix result;
+		result.setConstant( sin(this->getConstant()) );
+		return result;
+	}
+
+
+	Matrix result(rows,columns);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			result[i][j] = sin(elements[i][j]);
+		}
+	}
+
+	return result;
+}
+
+
+
+Matrix Matrix::mcos()
+{
+	if(isConstant())
+	{
+		Matrix result;
+		result.setConstant( cos(this->getConstant()) );
+		return result;
+	}
+
+
+	Matrix result(rows,columns);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			result[i][j] = cos(elements[i][j]);
+		}
+	}
+
+	return result;
+}
+
+
+
+
+Matrix Matrix::mtan()
+{
+	if(isConstant())
+	{
+		Matrix result; double val = this->getConstant();
+		result.setConstant( TAN(val));
+		return result;
+	}
+
+
+	Matrix result(rows,columns);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			result[i][j] = TAN(elements[i][j]);
+		}
+	}
+
+	return result;
 }
 
 // constants section=================
