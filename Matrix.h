@@ -57,6 +57,7 @@ public:
 	Matrix dotDivision(Matrix m);
 	Matrix dotPower(Matrix m);
 	Matrix dotPower(double value);
+	Matrix powerFraction(double value);
 	Matrix msqrt();
 	Matrix msin();
 	Matrix mcos();

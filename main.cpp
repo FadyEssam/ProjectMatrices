@@ -31,6 +31,12 @@ int main(int argc, char const *argv[])
 		 				while(parser.countBrackets(s)>0) 
 		 				{
 		 					getline(cin,s2);
+
+		 					s = parser.removeSidesSpaces(s);
+ 							s2 = parser.removeSidesSpaces(s2);
+ 							if(s[s.length()-1] != ';' && s2[0] != ';')
+ 							s+= string(";");
+
 		 					s+= s2;
 		 				}
 

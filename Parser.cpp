@@ -552,6 +552,12 @@ void Parser::handleLine(string line, int print)
  			while(countBrackets(s)>0) 
  			{
  				getline(file1,s2);
+
+ 				s = removeSidesSpaces(s);
+ 				s2 = removeSidesSpaces(s2);
+ 				if(s[s.length()-1] != ';' && s2[0] != ';')
+ 				s+= string(";");
+
  				s+= s2;
  			}
 

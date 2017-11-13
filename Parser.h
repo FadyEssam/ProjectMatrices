@@ -15,7 +15,6 @@ private:
 	int splitParentheses(string s, string separators, string** result, int* numberOfSeparators, string** seps);
 	int split(string s, string separators, string** result, int* numberOfSeparators, string** seps);
 	int split(string s, string separators, string** result); // returns number of strings
-	string removeSidesSpaces(string s);
 	string removeAllSpaces(string s);
 	Matrix* find(string name);
 	Matrix* add(string name, int rows, int columns);
@@ -27,13 +26,15 @@ private:
 	Matrix mulAndDivide(string line);
 	Matrix power(string line);
 	void deleteTemporaries();
+	Matrix parentheses(string line);
+
 
 public:
-	int countBrackets(string s);
-	Matrix parentheses(string line);
 	Parser();
+	string removeSidesSpaces(string s);
 	void handle(string line);
 	void load(string filePath);
+	int countBrackets(string s);
 
 
 
