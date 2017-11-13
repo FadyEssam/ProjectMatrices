@@ -66,7 +66,7 @@ int Parser::split(string s, string separators, string** result, int* numberOfSep
 		{
 			if (s[i] == separators[j])
 			{
-				if(s[i] == '-' && (string("+-*/$#%([").find(s[i-1])!=-1))
+				if(s[i] == '-' && (string("+-*/$#%([^").find(s[i-1])!=-1))
 				continue;
 				numberOfElements++;
 				Separators++;
@@ -1022,7 +1022,7 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 			else if(s[i]==')') parentheses--;
 			if (s[i] == separators[j] && parentheses==0)
 			{
-				if(s[i] == '-' && (string("+-*/$#%([").find(s[i-1])!=-1))
+				if(s[i] == '-' && (string("+-*/$#%([^").find(s[i-1])!=-1))
 				continue;
 
 				(*seps)[sepsCounter] = separators[j];

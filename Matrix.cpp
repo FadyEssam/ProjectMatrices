@@ -693,12 +693,22 @@ Matrix Matrix::operator^(double value)
 	{
 		Matrix result;
 		result.setConstant(1);
-		for (int i = 0; i < value; ++i)
-		{
-			result = result*(*this);
-		}
 
-		return result;
+			if(value<0)
+			{
+				value = -1*value;
+				return eye(rows,columns)/((*(this))^value);
+			}
+		else
+		{
+
+			for (int i = 0; i < value; ++i)
+			{
+				result = result*(*this);
+			}
+
+			return result;
+		}
 	}
 
 } 
