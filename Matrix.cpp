@@ -649,7 +649,6 @@ Matrix Matrix::inverse()
 Matrix Matrix::dotPower (double value)
 {
 
-	if(value==0) return *(this);
 	
 	if(isConstant())
 	{
@@ -678,8 +677,7 @@ Matrix Matrix::dotPower (double value)
 
 Matrix Matrix::operator^(double value)
 {
-	value = round(value);
-	if(value==0) return *(this);
+	
 	
 	if(isConstant())
 	{
@@ -689,8 +687,12 @@ Matrix Matrix::operator^(double value)
 		return result; 
 	}
 
+
+
 	else
 	{
+		value = round(value);
+			if(rows!=columns) throw "can't power non-square matrix";
 		Matrix result;
 		result.setConstant(1);
 
