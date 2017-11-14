@@ -49,34 +49,38 @@ void Matrix::initialize(double value)
 			elements[i][j] = value;
 }
 
-// Matrix::Matrix (const Matrix &m)
-// {
-// 	if(m.isConstant())
-// 	{
-// 		this->setConstant(m.getConstant());
-// 		name = m.name;
-// 		return;
-// 	}
+Matrix::Matrix (const Matrix &m)
+{
+	if(m.isConstant())
+	{
+		rows = 0;
+		columns = 0;
+		elements = new double*;
+		elements[0] = new double;
+		elements[0][0] = m.getConstant();
+		name = m.name;
+		return;
+	}
 
 	
-// 	rows = m.rows;
-// 	columns = m.columns;
-// 	name = m.name;
-// 	elements = new double*[rows];
-// 	for (int i = 0; i<rows; i++)
-// 		elements[i] = new double[columns];
+	rows = m.rows;
+	columns = m.columns;
+	name = m.name;
+	elements = new double*[rows];
+	for (int i = 0; i<rows; i++)
+		elements[i] = new double[columns];
 
 
-// 	for (int i = 0; i<rows; i++)
-// 		for (int j = 0; j<columns; j++)
-// 			elements[i][j] = m[i][j];
-// }
+	for (int i = 0; i<rows; i++)
+		for (int j = 0; j<columns; j++)
+			elements[i][j] = m[i][j];
+}
 
 
-// Matrix::~Matrix()
-// {
-// 	 //this->destroy();
-// }
+Matrix::~Matrix()
+{
+	 this->destroy();
+}
 
 
 void Matrix::destroy()

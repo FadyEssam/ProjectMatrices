@@ -14,8 +14,8 @@ private:
 public:
 	//essential
 	Matrix();
-	// Matrix (const Matrix &m);
-	// ~Matrix();
+	Matrix (const Matrix &m);
+	~Matrix();
 	Matrix(int r, int c);
 	Matrix(int r, int c, string n);
 	void initialize(double value);
