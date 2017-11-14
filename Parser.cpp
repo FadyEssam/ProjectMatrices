@@ -127,7 +127,7 @@ string Parser::removeSidesSpaces(string s)
 {
 	int start = 0;
 	for (int i = 0; i<s.length(); i++)
-		if (s[i] == ' ' || s[i]== '\t')
+		if (s[i] == ' ' || s[i]== '\t' || s[i]== '\n' || s[i]=='\r')
 			start++;
 		else break;
 
@@ -136,7 +136,7 @@ string Parser::removeSidesSpaces(string s)
 		string result = s.substr(start);
 
 		for (int i = result.length() - 1; i >= 0; i--)
-			if (result[i] == ' ' || result[i] == '\t')
+			if (result[i] == ' ' || result[i] == '\t'|| result[i]== '\n' || result[i]=='\r')
 				result.erase(i, 1);
 			else break;
 
@@ -148,7 +148,7 @@ string Parser::removeSidesSpaces(string s)
 string Parser::removeAllSpaces(string s)
 {
 	for (int i = s.length() - 1; i >= 0; i--)
-		if (s[i] == ' ' || s[i]=='\t')
+		if (s[i] == ' ' || s[i]=='\t' || s[i]== '\n' || s[i]=='\r')
 			s.erase(i, 1);
 
 	return s;
@@ -345,7 +345,7 @@ void Parser::handleLine(string line, int print)
 
  				s = removeSidesSpaces(s);
  				s2 = removeSidesSpaces(s2);
- 				if(s[s.length()-1] != ';' && s2[0] != ';')
+ 				if( string(";[=").find(s[s.length()-1])==-1 && s2[0] != ';')
  				s+= string(";");
 
  				s+= s2;
@@ -356,7 +356,7 @@ void Parser::handleLine(string line, int print)
 		{
 			if(s[i] == '\r' || s[i]== '\n' )
 				s.erase(i,1);
-		} 	
+		} 
 		if(s.length()!=0)
  		 handle(s); 
  	} 
