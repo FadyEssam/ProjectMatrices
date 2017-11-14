@@ -23,9 +23,9 @@ public:
 	void setRows(int r);
 	void setColumns(int c);
 	void setName(string s);
-	int getColumns();
-	int getRows();
-	string getName();
+	int getColumns() const;
+	int getRows() const;
+	string getName() const;
 	void setConstant(double value);
 	double getConstant() const;
 	int isConstant() const;
@@ -36,28 +36,28 @@ public:
 	//changing values
 	void setElement(int r, int c, double value);
 	double* operator[](int r) const;
-	void stickToSide(Matrix m);
-	void stickToBottom(Matrix m);
+	void stickToSide(const Matrix & m);
+	void stickToBottom(const Matrix & m);
 	
 
 	//Arithmatics
-	Matrix operator^(Matrix m);
+	Matrix operator^(const Matrix & m);
 	Matrix operator^(double value);
-	Matrix operator+(Matrix m);
-	void operator=(Matrix m);
-	Matrix operator-(Matrix m);
-	Matrix operator*(Matrix m);
-	double determinant();
-	Matrix inverse();
-	Matrix transbose();
-	Matrix operator/(Matrix m);
+	Matrix operator+(const Matrix & m);
+	void operator=(const Matrix & m);
+	Matrix operator-(const Matrix & m);
+	Matrix operator*(const Matrix & m);
+	double determinant() const;
+	Matrix inverse() const;
+	Matrix transbose() const;
+	Matrix operator/(const Matrix & m);
 	Matrix dotDivision(double value);
 	Matrix dotProduct(double value);
 	Matrix operator-(double value);
 	Matrix operator+(double value);
-	Matrix dotProduct(Matrix m);
-	Matrix dotDivision(Matrix m);
-	Matrix dotPower(Matrix m);
+	Matrix dotProduct(const Matrix & m);
+	Matrix dotDivision(const Matrix & m);
+	Matrix dotPower(const Matrix & m);
 	Matrix dotPower(double value);
 	Matrix powerFraction(double value);
 	Matrix msqrt();
@@ -70,7 +70,7 @@ public:
 
 	//Helping functions
 private:
-	Matrix removeColRow(int r, int c);
+	Matrix removeColRow(int r, int c)const;
 
 };
 

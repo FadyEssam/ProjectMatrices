@@ -117,18 +117,18 @@ void Matrix::setName(string s)
 }
 
 
-int Matrix::getColumns()
+int Matrix::getColumns() const
 {
 	return columns;
 }
 
-int Matrix::getRows()
+int Matrix::getRows() const
 {
 	return rows;
 }
 
 
-string Matrix::getName()
+string Matrix::getName() const
 {
 	return name;
 }
@@ -180,7 +180,7 @@ double* Matrix::operator[](int r) const
 
 
 //======================================== Arihtmatic
-Matrix Matrix::operator+ (Matrix m)
+Matrix Matrix::operator+ (const Matrix & m)
 {
 
 	if(m.isConstant())
@@ -218,7 +218,7 @@ Matrix Matrix::operator+ (Matrix m)
 	}
 }
 
-Matrix Matrix::operator- (Matrix m)
+Matrix Matrix::operator- (const Matrix & m)
 {
 
 	if(m.isConstant())
@@ -255,7 +255,7 @@ Matrix Matrix::operator- (Matrix m)
 }
 
 
-void Matrix::operator= (Matrix m) // to make it separately editable
+void Matrix::operator= (const Matrix & m) // to make it separately editable
 {
 
 
@@ -287,7 +287,7 @@ void Matrix::operator= (Matrix m) // to make it separately editable
 
 
 
-Matrix Matrix::operator* (Matrix m) // to make it separately editable
+Matrix Matrix::operator* (const Matrix & m) // to make it separately editable
 {
 
 	if(m.isConstant())
@@ -335,7 +335,7 @@ Matrix Matrix::operator* (Matrix m) // to make it separately editable
 }
 
 
-Matrix Matrix::dotProduct (Matrix m)
+Matrix Matrix::dotProduct (const Matrix & m)
 {
 
 	if(m.isConstant())
@@ -373,7 +373,7 @@ Matrix Matrix::dotProduct (Matrix m)
 }
 
 
-Matrix Matrix::dotDivision (Matrix m)
+Matrix Matrix::dotDivision (const Matrix & m)
 {
 	if(m.isConstant())
 	{
@@ -493,7 +493,7 @@ Matrix Matrix::operator+(double value)
 }
 
 
-Matrix Matrix::operator/ (Matrix m) // to make it separately editable
+Matrix Matrix::operator/ (const Matrix & m) // to make it separately editable
 {
 	if(m.isConstant())
 	{
@@ -527,7 +527,7 @@ Matrix Matrix::operator/ (Matrix m) // to make it separately editable
 }
 
 
-double Matrix::determinant()
+double Matrix::determinant() const
 {
 	double result = 0; char sign;
 
@@ -559,7 +559,7 @@ double Matrix::determinant()
 }
 
 
-Matrix Matrix::removeColRow(int r, int c)
+Matrix Matrix::removeColRow(int r, int c) const
 {
 
 	Matrix result(rows - 1, columns - 1);
@@ -583,7 +583,7 @@ Matrix Matrix::removeColRow(int r, int c)
 
 
 
-Matrix Matrix::transbose()
+Matrix Matrix::transbose() const
 {
 
 	Matrix result(columns, rows);
@@ -599,7 +599,7 @@ Matrix Matrix::transbose()
 
 
 
-Matrix Matrix::inverse()
+Matrix Matrix::inverse() const
 
 {
 	if (rows != columns) throw "Can't compute inverse for this function";
@@ -716,7 +716,7 @@ Matrix Matrix::operator^(double value)
 } 
 
 
-Matrix Matrix::operator^ (Matrix m)
+Matrix Matrix::operator^ (const Matrix & m)
 {
 	if(!m.isConstant())
 	{
@@ -729,7 +729,7 @@ Matrix Matrix::operator^ (Matrix m)
 	}
 }
 
-Matrix Matrix::dotPower (Matrix m)
+Matrix Matrix::dotPower (const Matrix & m)
 {
 	if(!m.isConstant())
 	{
@@ -926,7 +926,7 @@ Matrix eye(int r, int c)
 
 //subMatrix===========================================
 
-void Matrix::stickToSide(Matrix m)
+void Matrix::stickToSide(const Matrix & m)
 {
 	if(rows==0 && columns==0 && elements==NULL)
 	{
@@ -1016,7 +1016,7 @@ void Matrix::stickToSide(Matrix m)
 }
 
 
-void Matrix::stickToBottom(Matrix m)
+void Matrix::stickToBottom(const Matrix & m)
 {
 	if(rows==0 && columns==0 && elements==NULL)
 	{

@@ -11,6 +11,14 @@ Parser::Parser()
 {
 }
 
+Parser::~Parser()
+{
+	for (int i = 0; i < matrices.size(); ++i)
+	{
+		matrices[i]->destroy();
+	}
+}
+
 
 int Parser::split(string s, string separators, string** result)
 {
@@ -280,38 +288,17 @@ void Parser::handleLine(string line, int print)
 
 		operation[0] = removeAllSpaces(operation[0]);
 		operation[1] = removeSidesSpaces(operation[1]);
-		// operation[1].erase(operation[1].find("["), 1);
-		// operation[1].erase(operation[1].find("]"), 1); //remove "[,]"
-
-		// if(operation[1][operation[1].length()-1]==';')
-		// operation[1].erase(operation[1].length()-1,1);
-
-		// string* rows;
-		// int numberOfRows = split(operation[1], ROWS_SEPARATOR, &rows);
-		// int numberOfColumns;
-		// string** elementsCut= new string* [numberOfRows];
-
-
-		// for (int i = 0; i<numberOfRows; i++)
-		// {
-		// 	rows[i] = removeSidesSpaces(rows[i]);
-		// 	numberOfColumns = split(rows[i], COLUMN_SEPARATOR, &(elementsCut[i]));
-		// }
+		
 		Matrix temp = semiColumns(operation[1]);
 		Matrix* host = findOrAdd(operation[0], temp.getRows(), temp.getColumns());
 		(*host) = temp;
 		temp.destroy();
-		// host->setRows(numberOfRows);
-		// host->setColumns(numberOfColumns);
-		// for (int i = 0; i<numberOfRows; i++)
-		// 	for (int j = 0; j<numberOfColumns; j++)
-		// 	{
-		// 		elementsCut[i][j] = removeAllSpaces(elementsCut[i][j]);
-		// 		(*host)[i][j] = atof(elementsCut[i][j].c_str());
-		// 	}
+		
 
 		if (print == 1)
 			cout << (*host);
+
+		delete[] operation;
 	}
 
 
@@ -333,6 +320,9 @@ void Parser::handleLine(string line, int print)
 		(*host) = result;
 		if (print == 1)
 			cout << (*host);
+
+
+		delete[] operation;
 	}
 
 
@@ -612,6 +602,9 @@ Matrix Parser::plusAndMinus(string line)
 			
 			 
 		}
+
+		delete[] variables;
+		delete[] seps;
 		return result;
 	}
 
@@ -704,7 +697,8 @@ Matrix Parser::mulAndDivide(string line)
 			 
 		}
 
-
+		delete[] variables;
+		delete[] seps;
 		return result;
 		
 	}
@@ -775,7 +769,8 @@ Matrix Parser::mulAndDivide(string line)
 
 		}
 
-
+		delete[] variables;
+		delete[] seps;
 		return result;
 		
 	}
@@ -904,6 +899,10 @@ Matrix Parser::parentheses(string line)
 
 				temporaryNumber++;
 		}
+
+
+		delete[] variables;
+		delete[] seps;
 		return plusAndMinus(operation);
 
 }
@@ -1019,7 +1018,7 @@ Matrix Parser::semiColumns(string s)
 
 	}
 	temp.destroy();
-
+	delete[] rows;
 	return result;
 }
 
@@ -1051,6 +1050,7 @@ Matrix Parser::commasAndSpaces(string s)
 	}
 
 	temp.destroy();
+	delete[] columns;
 	return result;
 
 }

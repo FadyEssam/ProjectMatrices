@@ -33,6 +33,7 @@ private:
 
 public:
 	Parser();
+	~Parser();
 	int splitBrackets(string s, string separators, string** result);
 	string removeSidesSpaces(string s);
 	void handle(string line);
