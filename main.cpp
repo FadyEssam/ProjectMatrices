@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
 
 		 					s = parser.removeSidesSpaces(s);
  							s2 = parser.removeSidesSpaces(s2);
- 							if(s[s.length()-1] != ';' && s2[0] != ';')
+ 							if(string(";[=").find(s[s.length()-1])==-1 && s2[0] != ';')
  							s+= string(";");
 
 		 					s+= s2;
