@@ -71,6 +71,5 @@ B = [
 C = A + B
 D = A - B
 E = A * B
-F = A / B
 G = 1 ./ A
 H = C'

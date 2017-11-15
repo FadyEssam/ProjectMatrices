@@ -863,7 +863,7 @@ double Matrix::getConstant() const
 
 int Matrix::isConstant() const
 {
-	if( (rows == 0) && (columns == 0) && (elements != NULL))
+	if( ((rows == 0) && (columns == 0) && (elements != NULL) )|| ((rows==1) && (columns==1)) )
 		return 1;
 
 	else 
