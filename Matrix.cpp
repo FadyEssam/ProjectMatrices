@@ -243,7 +243,7 @@ Matrix Matrix::operator- (const Matrix & m)
 	}
 
 
-	if ((m.rows != rows) || (m.columns != columns)) throw "You can't substract two matrices with differentrows or columns";
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't substract two matrices with different rows or columns";
 
 	else
 	{
