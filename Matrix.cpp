@@ -207,7 +207,7 @@ Matrix Matrix::operator+ (const Matrix & m)
 	}
 
 
-	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different rows or columns";
 
 	else
 	{
@@ -243,7 +243,7 @@ Matrix Matrix::operator- (const Matrix & m)
 	}
 
 
-	if ((m.rows != rows) || (m.columns != columns)) throw "You can't substract two matrices with different R,C";
+	if ((m.rows != rows) || (m.columns != columns)) throw "You can't substract two matrices with differentrows or columns";
 
 	else
 	{
@@ -313,7 +313,7 @@ Matrix Matrix::operator* (const Matrix & m) // to make it separately editable
 		return result.dotProduct(m);
 	}
 
-	if (columns != m.rows)  throw "Functions can't be multiplied";
+	if (columns != m.rows)  throw "The two matrices can't be multiplied";
 
 	else
 	{
@@ -361,7 +361,7 @@ Matrix Matrix::dotProduct (const Matrix & m)
 	}
 
 
-	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
+	if ((m.rows != rows) || (m.columns != columns)) throw "The two matrices can't be multiplied";
 
 	else
 	{
@@ -397,7 +397,7 @@ Matrix Matrix::dotDivision (const Matrix & m)
 		return result.dotDivision(m);
 	}
 
-	if ((m.rows != rows) || (m.columns != columns)) throw "You can't add two matrices with different R,C";
+	if ((m.rows != rows) || (m.columns != columns)) throw "The two matrices can't be divided";
 
 	else
 	{
@@ -517,6 +517,7 @@ Matrix Matrix::operator/ (const Matrix & m) // to make it separately editable
 		return result.dotDivision(m);
 	}
 
+	if (columns != m.rows)  throw "The two matrices can't be divided";
 	Matrix tempM(rows, columns);
 
 
@@ -535,7 +536,7 @@ double Matrix::determinant() const
 {
 	double result = 0; char sign;
 
-	if (rows != columns) throw "Can't compute diterminant for this function";
+	if (rows != columns) throw "The matrix must be square to calculate it's diterminant";
 
 	else
 	{
@@ -606,7 +607,7 @@ Matrix Matrix::transbose() const
 Matrix Matrix::inverse() const
 
 {
-	if (rows != columns) throw "Can't compute inverse for this function";
+	if (rows != columns) throw "The matrix must be square to calculate inverse";
 
 	Matrix tempM(rows, columns); int sign;  double temp;
 

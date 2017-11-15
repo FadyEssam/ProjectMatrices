@@ -7,6 +7,9 @@
 #define COLUMN_SEPARATOR ", "
 #define FAKE_NAME "temporaryFakeForParenthese"
 
+int lineNumber=0; //global value to detect line number of error
+
+
 Parser::Parser()
 {
 }
@@ -333,15 +336,16 @@ void Parser::handleLine(string line, int print)
  {
  	 ifstream file1(filepath.c_str());
  	 string s;
- 	while(getline(file1,s))
+ 	while(getline(file1,s)) 
  	{
+ 		lineNumber++;
  		if(s.find("[")!=-1)
  		{
  		
  			string s2;
  			while(countBrackets(s)>0) 
  			{
- 				getline(file1,s2);
+ 				getline(file1,s2); lineNumber++;
 
  				s = removeSidesSpaces(s);
  				s2 = removeSidesSpaces(s2);
@@ -537,7 +541,11 @@ else if(positionTan == 0)
 		string original = var;
 		original.erase(original.length()-1,1);
 
-		Matrix originalM = *find(original);
+
+		Matrix* found = find(original);
+		if(found==NULL) throw string("Matrix ")+original+string(" not found"); 
+
+		Matrix originalM = *found;
 		Matrix* added = findOrAdd(var,originalM.getColumns(),originalM.getRows());
 		*added = originalM.transbose();
 	}
@@ -724,7 +732,9 @@ Matrix Parser::mulAndDivide(string line)
 
 		else 
 			{
-				result = *find(variables[0]);
+				Matrix* found = find(variables[0]);
+				if(found==NULL) throw string("Matrix ")+variables[0]+string(" not found");
+				result = *found;
 			}
 
 
@@ -745,8 +755,12 @@ Matrix Parser::mulAndDivide(string line)
 			 			}
 
 						else
+						{
+							Matrix* found = (find(variables[i + 1]));
+							if(found==NULL) throw string("Matrix ")+variables[i+1]+string(" not found");
+							result = (result ^ (*found));
+						}
 
-						result = (result ^ (*(find(variables[i + 1]))));
 			}
 
 
@@ -761,8 +775,11 @@ Matrix Parser::mulAndDivide(string line)
 			 			}
 
 						else
-
-						result = (result.dotPower((*(find(variables[i + 1])))));
+						{
+							Matrix* found = find(variables[i + 1]);
+							if(found==NULL) throw string("Matrix ")+variables[i+1]+string(" not found");
+							result = result.dotPower(*found);
+						}
 			}
 
 
