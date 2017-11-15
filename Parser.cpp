@@ -543,7 +543,7 @@ else if(positionTan == 0)
 
 
 		Matrix* found = find(original);
-		if(found==NULL) throw string("Matrix ")+original+string(" not found"); 
+		if(found==NULL) throw string("Matrix \'")+original+string("\' not found"); 
 
 		Matrix originalM = *found;
 		Matrix* added = findOrAdd(var,originalM.getColumns(),originalM.getRows());
@@ -733,7 +733,7 @@ Matrix Parser::mulAndDivide(string line)
 		else 
 			{
 				Matrix* found = find(variables[0]);
-				if(found==NULL) throw string("Matrix ")+variables[0]+string(" not found");
+				if(found==NULL) throw string("Matrix \'")+variables[0]+string("\' not found");
 				result = *found;
 			}
 
@@ -757,7 +757,7 @@ Matrix Parser::mulAndDivide(string line)
 						else
 						{
 							Matrix* found = (find(variables[i + 1]));
-							if(found==NULL) throw string("Matrix ")+variables[i+1]+string(" not found");
+							if(found==NULL) throw string("Matrix \'")+variables[i+1]+string("\' not found");
 							result = (result ^ (*found));
 						}
 
@@ -777,7 +777,7 @@ Matrix Parser::mulAndDivide(string line)
 						else
 						{
 							Matrix* found = find(variables[i + 1]);
-							if(found==NULL) throw string("Matrix ")+variables[i+1]+string(" not found");
+							if(found==NULL) throw string("Matrix \'")+variables[i+1]+string("\' not found");
 							result = result.dotPower(*found);
 						}
 			}
