@@ -65,6 +65,7 @@ public:
 	Matrix mcos();
 	Matrix mtan();
 	int isZeroMatrix() const;
+	double advancedDeterminant() const;
 
 
 

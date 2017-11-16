@@ -555,7 +555,7 @@ else if(positionDet == 0)
 
 
 		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
-		(*added).setConstant(originalM.determinant());
+		(*added).setConstant(originalM.advancedDeterminant());
 
 
 

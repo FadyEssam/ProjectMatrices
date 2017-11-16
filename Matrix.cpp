@@ -537,14 +537,15 @@ double Matrix::determinant() const
 	double result = 0; char sign;
 
 	if (rows != columns) throw "The matrix must be square to calculate it's determinant";
+	if(isConstant()) throw "Can't compute inverse for a constant";
 
 	else
 	{
 
-		if(isZeroMatrix())
-		{
-			return 0;
-		}
+		// if(isZeroMatrix())
+		// {
+		// 	return 0;
+		// }
 
 
 		if (rows == 2)
@@ -596,7 +597,7 @@ Matrix Matrix::removeColRow(int r, int c) const
 
 
 Matrix Matrix::transbose() const
-{
+{	
 
 	Matrix result(columns, rows);
 
@@ -615,6 +616,7 @@ Matrix Matrix::inverse() const
 
 {
 	if (rows != columns) throw "The matrix must be square to calculate inverse";
+	if(isConstant()) throw "Can't compute inverse for a constant";
 
 	Matrix tempM(rows, columns); int sign;  double temp;
 
@@ -623,7 +625,7 @@ Matrix Matrix::inverse() const
 		for (int j = 0; j<columns; j++)
 			tempM[i][j] = elements[i][j];
 
-	double determinant = this->determinant();
+	double determinant = this->advancedDeterminant();
 
 	if(determinant==0) 
 		{
@@ -645,7 +647,7 @@ Matrix Matrix::inverse() const
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 		{
-			temp = this->removeColRow(i, j).determinant();
+			temp = this->removeColRow(i, j).advancedDeterminant();
 			temp = temp / determinant;
 
 			if ((i % 2) == (j % 2)) sign = 1;
@@ -1137,3 +1139,51 @@ int Matrix::isZeroMatrix() const
 
 }
 //====================================================
+
+double Matrix::advancedDeterminant() const
+{
+	//creating L & U matrices
+
+if (rows != columns) throw "The matrix must be square to calculate it's determinant";
+	if(isConstant()) throw "Can't compute inverse for a constant";
+
+
+
+		if (rows == 2)
+			return ((elements[0][0] * elements[1][1]) - (elements[0][1] * elements[1][0]));
+
+
+
+
+	Matrix A = *(this);
+
+	double l;
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for(int j=0; j<columns; j++)
+		{
+			if(i<=j) continue;
+
+			l = A[i][j] / A[j][j];
+
+			for (int k = 0; k < columns; ++k)
+			{
+					A[i][k] = A[i][k] - (l*A[j][k]);
+			}
+
+
+		}
+	}
+
+	double det=1;
+
+	for (int i = 0; i < rows; ++i)
+	{
+		det*= A[i][i];
+	}
+
+	if(det!=det) return 0;
+
+	return det;
+}
