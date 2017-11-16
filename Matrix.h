@@ -66,6 +66,7 @@ public:
 	Matrix mtan();
 	int isZeroMatrix() const;
 	double advancedDeterminant() const;
+	double abs(double val) const;
 
 
 

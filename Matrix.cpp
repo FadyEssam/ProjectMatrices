@@ -542,10 +542,10 @@ double Matrix::determinant() const
 	else
 	{
 
-		// if(isZeroMatrix())
-		// {
-		// 	return 0;
-		// }
+		if(isZeroMatrix())
+		{
+			return 0;
+		}
 
 
 		if (rows == 2)
@@ -1153,37 +1153,77 @@ if (rows != columns) throw "The matrix must be square to calculate it's determin
 			return ((elements[0][0] * elements[1][1]) - (elements[0][1] * elements[1][0]));
 
 
+Matrix m =*(this);
 
 
-	Matrix A = *(this);
+int i, j, k;
+double det = 1.0;
+int n = rows;
+int *ri =  new int [n];
 
-	double l;
 
-	for (int i = 0; i < rows; ++i)
-	{
-		for(int j=0; j<columns; j++)
-		{
-			if(i<=j) continue;
 
-			l = A[i][j] / A[j][j];
+// Initialize the pointer vector.
+for(i = 0 ; i < n; i++)
+ri[i] = i;
 
-			for (int k = 0; k < columns; ++k)
+
+// LU factorization.
+for(int p = 1; p < n ; p++)
+  {
+// Find pivot element.
+
+
+	for (i = p + 1; i <= n; i++)
+	 {
+			if (abs(m[ri[i-1]][p-1]) > abs(m[ri[p-1]][p-1])) 
 			{
-					A[i][k] = A[i][k] - (l*A[j][k]);
+			// Switch the index for the p-1 pivot row if necessary.
+			int t = ri[p-1];
+			ri[p-1] = ri[i-1];
+			ri[i-1] = t;
+			det = -det;
 			}
 
-
-		}
 	}
 
-	double det=1;
 
-	for (int i = 0; i < rows; ++i)
+	if(m[ri[p-1]][p-1] == 0)
 	{
-		det*= A[i][i];
+		// The matrix is singular.
+		return 0;
 	}
 
-	if(det!=det) return 0;
 
-	return det;
+	// Multiply the diagonal elements.
+	det = det * m[ri[p-1]][p-1];
+
+
+
+	// Form multiplier.
+	for (i = p + 1; i <= n; i++) 
+	{
+			m[ri[i-1]][p-1] /= m[ri[p-1]][p-1];
+
+
+			// Eliminate [p-1].
+			for(int j = p + 1; j <= n; j++)
+					m[ri[i-1]][j-1] -= m[ri[i-1]][p-1] * m[ri[p-1]][j-1];
+	}
+
+
+}
+
+
+det = det * m[ri[n-1]][n-1];
+return det;
+ 
+}
+
+
+double Matrix::abs(double val) const
+{
+	if(val<0)
+		return -1*val;
+	else return val;
 }
