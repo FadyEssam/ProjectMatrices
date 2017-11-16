@@ -417,6 +417,7 @@ void Parser::inverseAndTransbose(string var)
 	int positionSin = var.find("sin[");
 	int positionCos = var.find("cos[");
 	int positionTan = var.find("tan[");
+	int positionDet = var.find("det[");
 	int positionTransbose = var.rfind("\'");
 
 	if(positionInverse == 0)
@@ -530,6 +531,31 @@ else if(positionTan == 0)
 
 		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
 		*added = originalM.mtan();
+
+
+
+	}
+
+
+
+else if(positionDet == 0)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1); 
+		original.erase(0,4);  
+
+		original.erase(original.length()-1,1);
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		(*added).setConstant(originalM.determinant());
 
 
 
@@ -1279,6 +1305,35 @@ string Parser::replace(string operation)
 			 	
 			 	operation.replace(pos,1,"]");
 			 }
+
+
+
+
+			  while(1)
+			 {
+			 	int pos = operation.find("det("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"det[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+
+			 }
+
 
 			 //======================================
 

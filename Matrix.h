@@ -64,6 +64,7 @@ public:
 	Matrix msin();
 	Matrix mcos();
 	Matrix mtan();
+	int isZeroMatrix() const;
 
 
 

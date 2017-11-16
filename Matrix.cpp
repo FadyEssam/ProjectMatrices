@@ -536,10 +536,17 @@ double Matrix::determinant() const
 {
 	double result = 0; char sign;
 
-	if (rows != columns) throw "The matrix must be square to calculate it's diterminant";
+	if (rows != columns) throw "The matrix must be square to calculate it's determinant";
 
 	else
 	{
+
+		if(isZeroMatrix())
+		{
+			return 0;
+		}
+
+
 		if (rows == 2)
 			return ((elements[0][0] * elements[1][1]) - (elements[0][1] * elements[1][0]));
 
@@ -617,6 +624,12 @@ Matrix Matrix::inverse() const
 			tempM[i][j] = elements[i][j];
 
 	double determinant = this->determinant();
+
+	if(determinant==0) 
+		{
+			cout<<"Warning : matrix is singular"<<endl;
+		}
+
 
 	if (rows == 2)
 	{
@@ -1104,6 +1117,23 @@ void Matrix::stickToBottom(const Matrix & m)
 	}
 
 
+
+}
+
+int Matrix::isZeroMatrix() const
+{
+
+		for (int i = 1; i < rows; ++i)
+		{
+			for(int j=0; j<columns-1; j++)
+			{
+				if((elements[i][j]/elements[i-1][j]) != (elements[i][j+1]/elements[i-1][j+1]))
+					return 0;
+			}
+		}
+
+
+	return 1;
 
 }
 //====================================================
