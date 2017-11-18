@@ -1,5 +1,5 @@
 CC=g++
-Deps= main.cpp Matrix.cpp Parser.cpp
+Deps= main.cpp Matrix.cpp Parser.cpp Complex.cpp
 OutputName=matrix
 	
 build: $(Deps) #first make command to build 

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
+#include "Complex.h"
 #define ROWS_SEPARATOR ";"
 #define COLUMN_SEPARATOR ", "
 #define FAKE_NAME "temporaryFakeForParenthese"
@@ -334,7 +335,7 @@ void Parser::handleLine(string line, int print)
 
  void Parser::load(string filepath)
  {
- 	 ifstream file1(filepath.c_str());
+ 	 ifstream file1(filepath);
  	 string s;
  	while(getline(file1,s)) 
  	{
@@ -597,7 +598,7 @@ Matrix Parser::plusAndMinus(string line)
 
 		if(isNumber(variables[0])) // setting result to first variable
 		{
-			result.setConstant(atof(variables[0].c_str()));
+			result.setConstant(Complex(variables[0]));
 
 		}
 
@@ -611,7 +612,7 @@ Matrix Parser::plusAndMinus(string line)
 			{
 				if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = result + val;
 			 			}
 			 	else
@@ -624,7 +625,7 @@ Matrix Parser::plusAndMinus(string line)
 			{
 				if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = result - val;
 			 			}
 			 	else
@@ -658,7 +659,7 @@ Matrix Parser::mulAndDivide(string line)
 
 		if(isNumber(variables[0])) // setting result to first variable
 		{
-			result.setConstant(atof(variables[0].c_str()));
+			result.setConstant(Complex(variables[0]));
 		}
 
 		else 
@@ -677,7 +678,7 @@ Matrix Parser::mulAndDivide(string line)
 
 				if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = result.dotProduct(val);
 			 			}
 
@@ -692,7 +693,7 @@ Matrix Parser::mulAndDivide(string line)
 				
 				if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = result.dotDivision(val);
 			 			}
 
@@ -705,7 +706,7 @@ Matrix Parser::mulAndDivide(string line)
 			 		{
 			 			if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = result.dotDivision(val);
 			 			}
 
@@ -719,7 +720,7 @@ Matrix Parser::mulAndDivide(string line)
 			 		{
 						if(isNumber(variables[i+1]))
 					 			{
-					 				double val = atof(variables[i+1].c_str());
+					 				Complex val = Complex(variables[i+1]);
 					 				result = result.dotProduct(val);
 					 			}
 					 		
@@ -753,7 +754,7 @@ Matrix Parser::mulAndDivide(string line)
 
 		if(isNumber(variables[0])) // setting result to first variable
 		{
-			result.setConstant(atof(variables[0].c_str()));
+			result.setConstant(Complex(variables[0]));
 		}
 
 		else 
@@ -776,7 +777,7 @@ Matrix Parser::mulAndDivide(string line)
 
 				if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = (result^val);
 			 			}
 
@@ -796,7 +797,7 @@ Matrix Parser::mulAndDivide(string line)
 
 				if(isNumber(variables[i+1]))
 			 			{
-			 				double val = atof(variables[i+1].c_str());
+			 				Complex val = Complex(variables[i+1]);
 			 				result = (result.dotPower(val));
 			 			}
 

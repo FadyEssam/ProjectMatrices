@@ -2,13 +2,14 @@
 #define MATRIXHH
 #include<iostream>
 #include<string>
+#include "Complex.h"
 using namespace std;
 
 class Matrix
 {
 private:
 	int rows, columns;
-	double** elements;
+	Complex** elements;
 	string name;
 
 public:
@@ -18,7 +19,7 @@ public:
 	~Matrix();
 	Matrix(int r, int c);
 	Matrix(int r, int c, string n);
-	void initialize(double value);
+	void initialize(Complex value);
 	void destroy();
 	void setRows(int r);
 	void setColumns(int c);
@@ -26,47 +27,47 @@ public:
 	int getColumns() const;
 	int getRows() const;
 	string getName() const;
-	void setConstant(double value);
-	double getConstant() const;
+	void setConstant(Complex value);
+	Complex getConstant() const;
 	int isConstant() const;
 	//printing
 	void print();
 
 
 	//changing values
-	void setElement(int r, int c, double value);
-	double* operator[](int r) const;
+	void setElement(int r, int c, Complex value);
+	Complex* operator[](int r) const;
 	void stickToSide(const Matrix & m);
 	void stickToBottom(const Matrix & m);
 	
 
 	//Arithmatics
 	Matrix operator^(const Matrix & m);
-	Matrix operator^(double value);
+	Matrix operator^(Complex value);
 	Matrix operator+(const Matrix & m);
 	void operator=(const Matrix & m);
 	Matrix operator-(const Matrix & m);
 	Matrix operator*(const Matrix & m);
-	double determinant() const;
+	Complex determinant() const;
 	Matrix inverse() const;
 	Matrix transbose() const;
 	Matrix operator/(const Matrix & m);
-	Matrix dotDivision(double value);
-	Matrix dotProduct(double value);
-	Matrix operator-(double value);
-	Matrix operator+(double value);
+	Matrix dotDivision(Complex value);
+	Matrix dotProduct(Complex value);
+	Matrix operator-(Complex value);
+	Matrix operator+(Complex value);
 	Matrix dotProduct(const Matrix & m);
 	Matrix dotDivision(const Matrix & m);
 	Matrix dotPower(const Matrix & m);
-	Matrix dotPower(double value);
-	Matrix powerFraction(double value);
+	Matrix dotPower(Complex value);
+	Matrix powerFraction(Complex value);
 	Matrix msqrt();
 	Matrix msin();
 	Matrix mcos();
 	Matrix mtan();
 	int isZeroMatrix() const;
-	double advancedDeterminant() const;
-	double abs(double val) const;
+	Complex advancedDeterminant() const;
+	Complex abs(Complex val) const;
 
 
 

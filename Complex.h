@@ -28,17 +28,51 @@ public:
 	double magnitude();
 	double phase();
 
-	Complex operator+(Complex&);
-	Complex operator-(Complex&);
-	Complex operator*(Complex&);
-	Complex operator/(Complex&);
-	Complex operator^(int);
+	Complex operator+(Complex);
+	Complex operator-(Complex);
+	Complex operator*(Complex);
+	Complex operator/(Complex);
+	Complex operator+=(Complex);
+	Complex operator-=(Complex);
+	Complex operator*=(Complex);
+	Complex operator/=(Complex);
+	Complex operator+(double a);
+	Complex operator-(double a);
+	Complex operator*(double a);
+	Complex operator/(double a);
+	Complex operator+=(double a);
+	Complex operator-=(double a);
+	Complex operator*=(double a);
+	Complex operator/=(double a);
+	Complex operator^(double a);
+	char operator<(double a);
+	char operator>(double a);
+	char operator<(Complex a);
+	char operator>(Complex a);
+	Complex operator-();
+	char operator==(Complex a);
+	char operator==(double a);
+	friend char operator==(double a, Complex b);
+	char operator!=(Complex a);
+	char operator!=(double a);
+	friend char operator!=(double a, Complex b);
+	friend Complex Round(Complex a);
+	
+	friend Complex Sqrt(Complex a);
+
 
 	static Complex rand();
 
-	friend Complex sin(Complex&);
-	friend Complex cos(Complex&);
+	friend Complex sin(Complex);
+	friend Complex cos(Complex);
+	friend Complex pow(Complex a, double p);
+	friend Complex operator+(double a,Complex b);
+	friend Complex operator-(double a,Complex b);
+	friend Complex operator*(double a,Complex b);
+	friend Complex operator/(double a,Complex b);
+	friend int operator<(double a,Complex b);
+	friend int operator>(double a,Complex b);
 
-	friend ostream& operator<<(ostream& out,Complex& a);
+	friend ostream& operator<<(ostream& out,Complex a);
 };
 #endif

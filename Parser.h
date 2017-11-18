@@ -2,6 +2,7 @@
 #define PARSERHH
 #include <vector>
 #include "Matrix.h"
+#include "Complex.h"
 #include <string>
 #include <sstream>
 

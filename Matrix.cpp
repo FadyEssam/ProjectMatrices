@@ -3,8 +3,8 @@
 #include <ostream>
 #include <stdlib.h>
 #include <cmath>
+#include "Complex.h"
 #define DEFAULT_NAME "ans"
-#define MAX_RANDOM 100
 #define TAN(x) (sin(x)/cos(x))
 
 
@@ -23,9 +23,9 @@ Matrix::Matrix(int r, int c)
 	rows = r;
 	columns = c;
 	name = DEFAULT_NAME;
-	elements = new double*[rows];
+	elements = new Complex*[rows];
 	for (int i = 0; i<rows; i++)
-		elements[i] = new double[columns];
+		elements[i] = new Complex[columns];
 
 }
 
@@ -35,14 +35,14 @@ Matrix::Matrix(int r, int c, string n)
 	rows = r;
 	columns = c;
 	name = n;
-	elements = new double*[rows];
+	elements = new Complex*[rows];
 	for (int i = 0; i<rows; i++)
-		elements[i] = new double[columns];
+		elements[i] = new Complex[columns];
 
 
 }
 
-void Matrix::initialize(double value)
+void Matrix::initialize(Complex value)
 {
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
@@ -55,8 +55,8 @@ Matrix::Matrix (const Matrix &m)
 	{
 		rows = 0;
 		columns = 0;
-		elements = new double*;
-		elements[0] = new double;
+		elements = new Complex*;
+		elements[0] = new Complex;
 		elements[0][0] = m.getConstant();
 		name = m.name;
 		return;
@@ -66,9 +66,9 @@ Matrix::Matrix (const Matrix &m)
 	rows = m.rows;
 	columns = m.columns;
 	name = m.name;
-	elements = new double*[rows];
+	elements = new Complex*[rows];
 	for (int i = 0; i<rows; i++)
-		elements[i] = new double[columns];
+		elements[i] = new Complex[columns];
 
 
 	for (int i = 0; i<rows; i++)
@@ -103,7 +103,7 @@ void Matrix::setRows(int r)
 {
 	this->destroy();
 	rows = r;
-	elements = new double*[rows];
+	elements = new Complex*[rows];
 
 }
 
@@ -111,7 +111,7 @@ void Matrix::setColumns(int c)
 {
 	columns = c;
 	for (int i = 0; i<rows; i++)
-		elements[i] = new double[columns];
+		elements[i] = new Complex[columns];
 }
 
 void Matrix::setName(string s)
@@ -172,12 +172,12 @@ ostream& operator<< (ostream & o, Matrix m)
 
 //================================== Editing
 
-void Matrix::setElement(int r, int c, double value)
+void Matrix::setElement(int r, int c, Complex value)
 {
 	elements[r][c] = value;
 }
 
-double* Matrix::operator[](int r) const
+Complex* Matrix::operator[](int r) const
 {
 	return elements[r];
 }
@@ -276,9 +276,9 @@ void Matrix::operator= (const Matrix & m) // to make it separately editable
 	rows = m.rows;
 	columns = m.columns;
 
-	elements = new double*[rows];
+	elements = new Complex*[rows];
 	for (int i = 0; i<rows; i++)
-		elements[i] = new double[columns];
+		elements[i] = new Complex[columns];
 
 
 	for (int i = 0; i<rows; i++)
@@ -412,7 +412,7 @@ Matrix Matrix::dotDivision (const Matrix & m)
 	}
 }
 
-Matrix Matrix::dotProduct(double value)
+Matrix Matrix::dotProduct(Complex value)
 {
 
 	if(isConstant())
@@ -435,7 +435,7 @@ Matrix Matrix::dotProduct(double value)
 
 
 
-Matrix Matrix::dotDivision(double value)
+Matrix Matrix::dotDivision(Complex value)
 {
 	if(isConstant())
 	{
@@ -454,7 +454,7 @@ Matrix Matrix::dotDivision(double value)
 }
 
 
-Matrix Matrix::operator-(double value)
+Matrix Matrix::operator-(Complex value)
 {
 
 	if(isConstant())
@@ -477,7 +477,7 @@ Matrix Matrix::operator-(double value)
 
 
 
-Matrix Matrix::operator+(double value)
+Matrix Matrix::operator+(Complex value)
 {
 	if(isConstant())
 	{
@@ -532,9 +532,9 @@ Matrix Matrix::operator/ (const Matrix & m) // to make it separately editable
 }
 
 
-double Matrix::determinant() const
+Complex Matrix::determinant() const
 {
-	double result = 0; char sign;
+	Complex result = 0; char sign;
 
 	if (rows != columns) throw "The matrix must be square to calculate it's determinant";
 	if(isConstant()) throw "Can't compute inverse for a constant";
@@ -618,14 +618,14 @@ Matrix Matrix::inverse() const
 	if (rows != columns) throw "The matrix must be square to calculate inverse";
 	if(isConstant()) throw "Can't compute inverse for a constant";
 
-	Matrix tempM(rows, columns); int sign;  double temp;
+	Matrix tempM(rows, columns); int sign;  Complex temp;
 
 
 	for (int i = 0; i<rows; i++)
 		for (int j = 0; j<columns; j++)
 			tempM[i][j] = elements[i][j];
 
-	double determinant = this->advancedDeterminant();
+	Complex determinant = this->advancedDeterminant();
 
 	if(determinant==0) 
 		{
@@ -666,7 +666,7 @@ Matrix Matrix::inverse() const
 }
 
 
-Matrix Matrix::dotPower (double value)
+Matrix Matrix::dotPower (Complex value)
 {
 
 	
@@ -674,7 +674,7 @@ Matrix Matrix::dotPower (double value)
 	{
 		Matrix result;
 		result = *(this);
-		result[0][0] = pow(result[0][0],value);
+		result[0][0] = Pow(result[0][0],value);
 		return result; 
 	}
 
@@ -685,7 +685,7 @@ Matrix Matrix::dotPower (double value)
 		{
 			for (int j = 0; j < columns; ++j)
 			{
-				result[i][j] = pow(elements[i][j],value);
+				result[i][j] = Pow(elements[i][j],value);
 			}
 		}
 
@@ -695,7 +695,7 @@ Matrix Matrix::dotPower (double value)
 } 
 
 
-Matrix Matrix::operator^(double value)
+Matrix Matrix::operator^(Complex value)
 {
 	
 	
@@ -703,7 +703,7 @@ Matrix Matrix::operator^(double value)
 	{
 		Matrix result;
 		result = *(this);
-		result[0][0] = pow(result[0][0],value);
+		result[0][0] = Pow(result[0][0],value);
 		return result; 
 	}
 
@@ -711,7 +711,7 @@ Matrix Matrix::operator^(double value)
 
 	else
 	{
-		value = round(value);
+		value = Round(value);
 			if(rows!=columns) throw "can't power non-square matrix";
 		Matrix result;
 		result.setConstant(1);
@@ -768,7 +768,7 @@ Matrix Matrix::msqrt()
 	if(isConstant())
 	{
 		Matrix result;
-		result.setConstant( sqrt(this->getConstant()) );
+		result.setConstant( Sqrt(this->getConstant()) );
 		return result;
 	}
 
@@ -779,7 +779,7 @@ Matrix Matrix::msqrt()
 	{
 		for (int j = 0; j < columns; ++j)
 		{
-			result[i][j] = pow(elements[i][j],0.5);
+			result[i][j] = Pow(elements[i][j],0.5);
 		}
 	}
 
@@ -842,7 +842,7 @@ Matrix Matrix::mtan()
 {
 	if(isConstant())
 	{
-		Matrix result; double val = this->getConstant();
+		Matrix result; Complex val = this->getConstant();
 		result.setConstant( TAN(val));
 		return result;
 	}
@@ -863,15 +863,15 @@ Matrix Matrix::mtan()
 
 // constants section=================
 
-void Matrix::setConstant(double value)
+void Matrix::setConstant(Complex value)
 {
 	this->destroy();
-	elements = new double*;
-	elements[0] = new double;
+	elements = new Complex*;
+	elements[0] = new Complex;
 	elements[0][0] = value;
 }
 
-double Matrix::getConstant() const
+Complex Matrix::getConstant() const
 	{
 		return elements[0][0];
 	}
@@ -915,7 +915,7 @@ Matrix rand(int r, int c)
 	{
 		for(int j=0; j<c; j++)
 		{
-			result[i][j] = rand()%MAX_RANDOM+1;
+			result[i][j] = Complex::rand();
 		}
 	}
 
@@ -1140,7 +1140,7 @@ int Matrix::isZeroMatrix() const
 }
 //====================================================
 
-double Matrix::advancedDeterminant() const
+Complex Matrix::advancedDeterminant() const
 {
 	//creating L & U matrices
 
@@ -1157,7 +1157,7 @@ Matrix m =*(this);
 
 
 int i, j, k;
-double det = 1.0;
+Complex det = 1.0;
 int n = rows;
 int *ri =  new int [n];
 
@@ -1221,7 +1221,7 @@ return det;
 }
 
 
-double Matrix::abs(double val) const
+Complex Matrix::abs(Complex val) const
 {
 	if(val<0)
 		return -1*val;

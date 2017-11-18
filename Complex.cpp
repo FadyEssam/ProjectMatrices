@@ -1,5 +1,5 @@
 #include "Complex.h"
-
+#define MAX_RAND 100
 Complex::Complex(){
 	this->real=0;
 	this->img=0;
@@ -13,6 +13,16 @@ Complex::Complex(double real,double img){
 	this->img = img;
 }
 Complex::Complex(string complex){
+	for (int i = 0; i < complex.length(); ++i)
+	{
+		if(complex[i]=='i')
+		{
+			complex.erase(i,1);
+			complex += string("i");
+			break;
+		}
+	}
+
 	int seperator;
 	int sign;
 	if(complex.find_first_of("+",1) != -1){
@@ -37,7 +47,7 @@ Complex::Complex(string complex){
 	}else{
 		this->real = atof(complex.substr(0,seperator).c_str());
 		if(complex.substr(seperator,complex.length()-seperator-1).length() == 1)
-			this->img = 1;
+			this->img = 1*((complex[seperator]=='-')?-1:1);
 		else
 			this->img = atof(complex.substr(seperator,complex.length()-seperator-1).c_str());
 	}
@@ -63,25 +73,25 @@ double Complex::phase(){
 	return toDegree(atan(this->img/this->real));
 }
 
-Complex Complex::operator+(Complex& a){
+Complex Complex::operator+(Complex a){
 	Complex result;
 	result.real = this->real + a.real;
 	result.img = this->img + a.img;
 	return result;
 }
-Complex Complex::operator-(Complex& a){
+Complex Complex::operator-(Complex a){
 	Complex result;
 	result.real = this->real - a.real;
 	result.img = this->img - a.img;
 	return result;
 }
-Complex Complex::operator*(Complex& a){
+Complex Complex::operator*(Complex a){
 	Complex result;
 	result.real = this->real * a.real - this->img * a.img;
 	result.img = this->real * a.img + this->img * a.real;
 	return result;
 }
-Complex Complex::operator/(Complex& a){
+Complex Complex::operator/(Complex a){
 	Complex result;
 	double mag = this->magnitude() / a.magnitude();
 	double phase = this->phase() - a.phase(); 
@@ -89,7 +99,32 @@ Complex Complex::operator/(Complex& a){
 	result.img = mag*sin(toRadian(phase));
 	return result;
 }
-Complex Complex::operator^(int a){
+
+Complex Complex::operator+(double a){
+	Complex result;
+	result.real = this->real + a;
+	result.img = this->img;
+	return result;
+}
+Complex Complex::operator-(double a){
+	Complex result;
+	result.real = this->real - a;
+	result.img = this->img;
+	return result;
+}
+Complex Complex::operator*(double a){
+	Complex result;
+	result.real = this->real * a;
+	result.img = this->img * a;
+	return result;
+}
+Complex Complex::operator/(double a){
+	Complex result;
+	result.real = this->real / a;
+	result.img = this->img / a;
+	return result;
+}
+Complex Complex::operator^(double a){
 	Complex result;
 	double mag = pow(this->magnitude(),a);
 	double phase = this->phase() * a; 
@@ -101,29 +136,29 @@ Complex Complex::operator^(int a){
 
 Complex Complex::rand(){
 	Complex result;
-	result.real = ::rand()%100;
-	result.img = ::rand()%100;
+	result.real = ::rand()%MAX_RAND;
+	result.img = ::rand()%MAX_RAND;
 	return result;
 }
 
-Complex sin(Complex& a){
+Complex sin(Complex a){
 	Complex result;
 	result.real = sin(a.real)*cosh(a.img);
 	result.img = cos(a.real)*sinh(a.img);
 	return result;
 }
 
-Complex cos(Complex& a){
+Complex cos(Complex a){
 	Complex result;
 	result.real = cos(a.real)*cosh(a.img);
 	result.img = -sin(a.real)*sinh(a.img);
 	return result;
 }
 
-ostream& operator<<(ostream& out,Complex& a){
+ostream& operator<<(ostream& out,Complex a){
 	if(a.real != 0) out << a.real;
 	if(a.img > 0 && a.real != 0) 
-		if(a.img != 1)
+		if(a.img != 1 )
 			out << "+" << a.img << "i";
 		else
 			out << "+i";
@@ -132,6 +167,200 @@ ostream& operator<<(ostream& out,Complex& a){
 			out << a.img << "i";
 		else
 			out << "i";
-	else if(a.img < 0) out << a.img << "i";
+	else if(a.img < 0 && a.img!= -1) out << a.img << "i";
+	else if(a.img == -1) out<< "-i";
+
+
+	return out;
+
+}
+
+
+char Complex::operator<(double a)
+{
+	if(real> a)
+		return 1;
+	else
+		return 0;
+}
+char Complex::operator>(double a)
+{
+	if(real<a)
+		return 1;
+	else
+		return 0;
+}
+
+Complex Pow(Complex a, double p)
+{
+	return a^p;
+}
+
+
+Complex Complex::operator+=(Complex a)
+{
+	return (*this) + a;
+}
+
+Complex Complex::operator-=(Complex a)
+{
+	return (*this) - a;
+}
+
+
+Complex Complex::operator*=(Complex a)
+{
+	return (*this) * a;
+}
+
+
+Complex Complex::Complex::operator/=(Complex a)
+{
+	return (*this) / a;
+}
+
+
+Complex Complex::operator+=(double a)
+{
+	return (*this) + a;
+}
+
+Complex Complex::operator-=(double a)
+{
+	return (*this) - a;
+}
+
+
+Complex Complex::operator*=(double a)
+{
+	return (*this) * a;
+}
+
+
+Complex Complex::operator/=(double a)
+{
+	return (*this) / a;
+}
+
+
+
+
+
+Complex operator+(double a,Complex b)
+{
+	return b + a;
+}
+
+
+Complex operator-(double a,Complex b)
+{
+	return b - a;
+}
+
+
+
+
+Complex operator*(double a,Complex b)
+{
+	return b * a;
+}
+
+
+
+
+Complex operator/(double a,Complex b)
+{
+	return b / a;
+}
+
+
+
+int operator<(double a,Complex b)
+{
+	return b < a;
+}
+
+
+
+
+int operator>(double a,Complex b)
+{
+	return b > a;
+}
+
+
+char Complex::operator>(Complex a)
+{
+	return this->magnitude() > a.magnitude();
+}
+	
+
+char Complex::operator<(Complex a)
+{
+	return this->magnitude() < a.magnitude();
+}
+	
+
+Complex Complex::operator-()
+{
+	Complex result;
+	result.img = -1*this->img;
+	result.real = -1*this->real;
+
+	return result;
+}
+
+Complex Sqrt(Complex a)
+{
+	return Pow(a,0.5);
+}
+
+char Complex::operator==(double a)
+{
+	if(a == this->real && this->img==0)
+		return 1;
+	else return 0;
+}
+
+char Complex::operator==(Complex a)
+{
+	if(a.real == this->real && this->img==a.img)
+		return 1;
+	else return 0;
+}
+
+char operator==(double a,Complex b)
+{
+	return (b==a);
+}
+
+
+
+
+char Complex::operator!=(double a)
+{
+	if(a == this->real && this->img==0)
+		return 0;
+	else return 1;
+}
+
+char Complex::operator!=(Complex a)
+{
+	if(a.real == this->real && this->img==a.img)
+		return 0;
+	else return 1;
+}
+
+char operator!=(double a,Complex b)
+{
+	return (b!=a);
+}
+
+Complex Round(Complex a)
+{
+
+	a.real = round(a.real);
+	a.img = round(a.img);
+	return a;
 
 }
