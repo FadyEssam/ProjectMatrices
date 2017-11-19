@@ -1227,3 +1227,8 @@ Complex Matrix::abs(Complex val) const
 		return -1*val;
 	else return val;
 }
+
+Complex Matrix::powerFraction(double value)const
+{
+
+}

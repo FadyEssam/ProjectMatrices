@@ -1,5 +1,7 @@
 #include "Complex.h"
 #define MAX_RAND 100
+#define TAN(X) (sin(X)/cos(X))
+
 Complex::Complex(){
 	this->real=0;
 	this->img=0;
@@ -13,6 +15,12 @@ Complex::Complex(double real,double img){
 	this->img = img;
 }
 Complex::Complex(string complex){
+	if(complex.length()==0)
+	{
+		this->real=0;
+		this->img=0;
+		return;
+	}
 	for (int i = 0; i < complex.length(); ++i)
 	{
 		if(complex[i]=='i')
@@ -38,10 +46,14 @@ Complex::Complex(string complex){
 	}
 	if(seperator == -1){
 		if(complex[complex.length()-1] == 'i'){
-			this->img = atof(complex.substr(0,seperator).c_str());
+			complex.erase(complex.find("i"),1);
+			if(complex.length()==0)
+				this->img = 1;
+			else
+				this->img = atof(complex.c_str());
 			this->real = 0;
 		}else{
-			this->real = atof(complex.substr(0,seperator).c_str());
+			this->real = atof(complex.c_str());
 			this->img=0;
 		}
 	}else{
@@ -70,7 +82,7 @@ double Complex::magnitude(){
 	return sqrt(pow(this->real,2)+pow(this->img,2));
 }
 double Complex::phase(){
-	return toDegree(atan(this->img/this->real));
+	return toDegree(atan2(this->img,this->real));
 }
 
 Complex Complex::operator+(Complex a){
@@ -93,11 +105,9 @@ Complex Complex::operator*(Complex a){
 }
 Complex Complex::operator/(Complex a){
 	Complex result;
-	double mag = this->magnitude() / a.magnitude();
-	double phase = this->phase() - a.phase(); 
-	result.real = mag*cos(toRadian(phase));
-	result.img = mag*sin(toRadian(phase));
-	return result;
+	result.real = a.real;
+	result.img = -1*a.img; 
+	return (  ((*this)*result) / (a.magnitude()*a.magnitude())  );
 }
 
 Complex Complex::operator+(double a){
@@ -137,7 +147,7 @@ Complex Complex::operator^(double a){
 Complex Complex::rand(){
 	Complex result;
 	result.real = ::rand()%MAX_RAND;
-	result.img = ::rand()%MAX_RAND;
+	result.img = 0;
 	return result;
 }
 
@@ -156,6 +166,7 @@ Complex cos(Complex a){
 }
 
 ostream& operator<<(ostream& out,Complex a){
+	if(a.real==0 && a.img==0) out<<0;
 	if(a.real != 0) out << a.real;
 	if(a.img > 0 && a.real != 0) 
 		if(a.img != 1 )
@@ -178,14 +189,14 @@ ostream& operator<<(ostream& out,Complex a){
 
 char Complex::operator<(double a)
 {
-	if(real> a)
+	if(this->magnitude()< a)
 		return 1;
 	else
 		return 0;
 }
 char Complex::operator>(double a)
 {
-	if(real<a)
+	if(this->magnitude()>a)
 		return 1;
 	else
 		return 0;
@@ -196,52 +207,56 @@ Complex Pow(Complex a, double p)
 	return a^p;
 }
 
-
-Complex Complex::operator+=(Complex a)
+Complex Pow(Complex a, Complex p)
 {
-	return (*this) + a;
-}
-
-Complex Complex::operator-=(Complex a)
-{
-	return (*this) - a;
+	return a^p.magnitude();
 }
 
 
-Complex Complex::operator*=(Complex a)
+void Complex::operator+=(Complex a)
 {
-	return (*this) * a;
+	(*this) = (*this) + a;
+}
+
+void Complex::operator-=(Complex a)
+{
+	(*this) = (*this) - a;
 }
 
 
-Complex Complex::Complex::operator/=(Complex a)
+void Complex::operator*=(Complex a)
 {
-	return (*this) / a;
+	(*this) = (*this) * a;
 }
 
 
-Complex Complex::operator+=(double a)
+void Complex::operator/=(Complex a)
 {
-	return (*this) + a;
-}
-
-Complex Complex::operator-=(double a)
-{
-	return (*this) - a;
+	(*this) = (*this) / a;
 }
 
 
-Complex Complex::operator*=(double a)
+void Complex::operator+=(double a)
 {
-	return (*this) * a;
+	(*this) = (*this) + a;
+}
+
+void Complex::operator-=(double a)
+{
+	(*this) = (*this) - a;
 }
 
 
-Complex Complex::operator/=(double a)
+void Complex::operator*=(double a)
 {
-	return (*this) / a;
+	(*this) = (*this) * a;
 }
 
+
+void Complex::operator/=(double a)
+{
+	(*this) = (*this) / a;
+}
 
 
 
@@ -254,7 +269,9 @@ Complex operator+(double a,Complex b)
 
 Complex operator-(double a,Complex b)
 {
-	return b - a;
+	Complex A(a);
+
+	return A - b;
 }
 
 
@@ -270,14 +287,16 @@ Complex operator*(double a,Complex b)
 
 Complex operator/(double a,Complex b)
 {
-	return b / a;
+	Complex A(a);
+
+	return A / b;
 }
 
 
 
 int operator<(double a,Complex b)
 {
-	return b < a;
+	return b > a;
 }
 
 
@@ -285,7 +304,7 @@ int operator<(double a,Complex b)
 
 int operator>(double a,Complex b)
 {
-	return b > a;
+	return b < a;
 }
 
 

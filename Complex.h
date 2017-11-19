@@ -32,18 +32,18 @@ public:
 	Complex operator-(Complex);
 	Complex operator*(Complex);
 	Complex operator/(Complex);
-	Complex operator+=(Complex);
-	Complex operator-=(Complex);
-	Complex operator*=(Complex);
-	Complex operator/=(Complex);
+	void operator+=(Complex);
+	void operator-=(Complex);
+	void operator*=(Complex);
+	void operator/=(Complex);
 	Complex operator+(double a);
 	Complex operator-(double a);
 	Complex operator*(double a);
 	Complex operator/(double a);
-	Complex operator+=(double a);
-	Complex operator-=(double a);
-	Complex operator*=(double a);
-	Complex operator/=(double a);
+	void operator+=(double a);
+	void operator-=(double a);
+	void operator*=(double a);
+	void operator/=(double a);
 	Complex operator^(double a);
 	char operator<(double a);
 	char operator>(double a);
@@ -65,7 +65,8 @@ public:
 
 	friend Complex sin(Complex);
 	friend Complex cos(Complex);
-	friend Complex pow(Complex a, double p);
+	friend Complex Pow(Complex a, double p);
+	friend Complex Pow(Complex a, Complex p);
 	friend Complex operator+(double a,Complex b);
 	friend Complex operator-(double a,Complex b);
 	friend Complex operator*(double a,Complex b);

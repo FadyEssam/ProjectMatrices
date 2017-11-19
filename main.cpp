@@ -8,7 +8,6 @@ using namespace std;
 extern int lineNumber;
 int main(int argc, char const *argv[])
 {
-
 	Parser parser; 
 
  

@@ -68,6 +68,7 @@ public:
 	int isZeroMatrix() const;
 	Complex advancedDeterminant() const;
 	Complex abs(Complex val) const;
+	Complex powerFraction(double value)const;
 
 
 

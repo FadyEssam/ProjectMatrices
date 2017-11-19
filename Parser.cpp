@@ -400,10 +400,11 @@ void Parser::handle(string line)
 
 int Parser::isNumber(string s)
 {
+	if(s.length()==0) return 1;
 	for (int i = 0; i < s.length(); ++i)
 	{
 		
-		if(!(  (s[i]>47 && s[i]<58) || s[i]=='.' || s[i]== '-') )
+		if(!(  (s[i]>47 && s[i]<58) || s[i]=='.' || s[i]== '-' || s[i]=='+' || s[i]=='i') )
 			{return 0;}
 	}
 
@@ -581,7 +582,7 @@ else if(positionDet == 0)
 
 
 Matrix Parser::plusAndMinus(string line)
-{
+{	
 	 
  
 		
@@ -607,7 +608,7 @@ Matrix Parser::plusAndMinus(string line)
 			
 
 		for (int i = 0; i<numberOfSeparators; i++)
-		{
+		{			
 			if (!seps[i].compare("+"))
 			{
 				if(isNumber(variables[i+1]))
@@ -623,14 +624,16 @@ Matrix Parser::plusAndMinus(string line)
 			else if (!seps[i].compare("-"))
 			
 			{
+
 				if(isNumber(variables[i+1]))
 			 			{
 			 				Complex val = Complex(variables[i+1]);
 			 				result = result - val;
 			 			}
 			 	else
-				
+				{
 					result = result - mulAndDivide(variables[i+1]);
+				}
 			}
 
 
@@ -888,7 +891,6 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 	}
 	counter++;
 	*numberOfSeparators = Separators;
-
 	
 	for(int i=0; i<numberOfElements; i++)
 	{
@@ -899,6 +901,7 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 			(*result)[i].erase((*result)[i].length()-1,1);
 
 	}
+	if(counter==2)
 	return counter;
 
 }
@@ -914,6 +917,7 @@ Matrix Parser::parentheses(string line)
 		int numberOfVariables;
 		numberOfVariables = splitParentheses(line, "/*+-$#^", &variables, &numberOfSeparators, &seps); 
 		Matrix *variableMatrices = new Matrix[numberOfVariables];
+
 
 		for (int i = 0; i < numberOfVariables; ++i)
 		{
@@ -932,10 +936,10 @@ Matrix Parser::parentheses(string line)
 			else
 				variableMatrices[i] = plusAndMinus(variables[i]);
 
+
 			string name = string(FAKE_NAME) + SSTR(temporaryNumber);
 			Matrix* temp = findOrAdd(name,variableMatrices[i].getRows(),variableMatrices[i].getColumns());
 				*temp = variableMatrices[i];
-
 				operation+= name;
 				
 				if(i<numberOfVariables-1)
@@ -943,8 +947,7 @@ Matrix Parser::parentheses(string line)
 
 				temporaryNumber++;
 		}
-
-
+		
 		delete[] variables;
 		delete[] seps;
 		return plusAndMinus(operation);
