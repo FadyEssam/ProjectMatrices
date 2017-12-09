@@ -69,6 +69,8 @@ public:
 	Complex advancedDeterminant() const;
 	Complex abs(Complex val) const;
 	Complex powerFraction(double value)const;
+	Matrix mlog();
+	Matrix mexp();
 
 
 

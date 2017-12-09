@@ -147,6 +147,7 @@ Complex Complex::operator^(double a){
 Complex Complex::rand(){
 	Complex result;
 	result.real = ::rand()%MAX_RAND;
+	result.real /= MAX_RAND;
 	result.img = 0;
 	return result;
 }

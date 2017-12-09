@@ -310,7 +310,6 @@ void Parser::handleLine(string line, int print)
 	else //it's an operation on existing matrix
 	{
 
-		
 		line = removeAllSpaces(line);
 		string* operation;
 		split(line, "=", &operation);
@@ -374,6 +373,15 @@ void Parser::handle(string line)
 {
 	if(line.find("=")==-1)
 	{
+		for (int i = 0; i < matrices.size(); ++i)
+		{
+			if(!matrices[i]->getName().compare(line))
+				{
+					cout<<(*matrices[i]);
+					return;
+				}
+		}
+
 		line = string("ans = ") + line;
 	}
 
@@ -417,6 +425,8 @@ void Parser::inverseAndTransbose(string var)
 	int positionInverse = var.find("inv[");
 	int positionSqrt = var.find("sqrt[");
 	int positionSin = var.find("sin[");
+	int positionExp = var.find("exp[");
+	int positionLog = var.find("log10[");
 	int positionCos = var.find("cos[");
 	int positionTan = var.find("tan[");
 	int positionDet = var.find("det[");
@@ -562,6 +572,54 @@ else if(positionDet == 0)
 
 
 	}
+
+
+else if(positionLog == 0)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1); 
+		original.erase(0,6);  
+
+		original.erase(original.length()-1,1);
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.mlog();
+
+
+
+	}
+
+	else if(positionExp == 0)
+	{
+		string original = var;
+			if(positionTransbose == (var.length()-1))
+				original.erase(var.length()-1,1); 
+		original.erase(0,4);  
+
+		original.erase(original.length()-1,1);
+
+		 Matrix originalM = parentheses(original);
+		 string onlyInverse = var;
+
+		 if(positionTransbose == (var.length()-1))
+				onlyInverse.erase(var.length()-1,1);
+
+
+		Matrix* added = findOrAdd(onlyInverse,originalM.getColumns(),originalM.getRows());
+		*added = originalM.mexp();
+
+
+
+	}
+
 
 
 	if(positionTransbose == (var.length()-1))
@@ -1043,9 +1101,16 @@ Matrix Parser::semiColumns(string s)
 {
 	s = removeSidesSpaces(s);
 	s.erase(0,1); //delete [
-	if(s[s.length()]==']')
-	s.erase(s.length()-1,1); //delete ]
-	if(s[s.length()-1==';'])
+
+	if(s[s.length()-1]==']')
+		s.erase(s.length()-1,1); //delete ]
+
+if(s.length()==0)
+{
+	throw "Can't initialize empty matrix";
+}
+
+	if(s[s.length()-1]==';')
 		s.erase(s.length()-1,1);   
 
 	string* rows; // el rows b3d ma tt2ta3 
@@ -1318,6 +1383,57 @@ string Parser::replace(string operation)
 			 	int pos = operation.find("det("); int posRight;
 			 	if(pos==-1) break;
 			 	operation.replace(pos,4,"det[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+
+			 }
+
+			 			  while(1)
+			 {
+			 	int pos = operation.find("log10("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,6,"log10[");
+			 	int parentheses = 1;
+			 	for (int i = pos+1; i < operation.length(); ++i)
+			 	{
+			 		if(operation[i] == '(')
+			 			parentheses++;
+			 		if(operation[i] == ')')
+			 			parentheses--;
+
+			 		if(parentheses==0)
+			 		{
+			 			pos = i;
+			 			break;
+			 		}
+			 	}
+
+			 	
+			 	operation.replace(pos,1,"]");
+
+			 }
+
+
+			 			  while(1)
+			 {
+			 	int pos = operation.find("exp("); int posRight;
+			 	if(pos==-1) break;
+			 	operation.replace(pos,4,"exp[");
 			 	int parentheses = 1;
 			 	for (int i = pos+1; i < operation.length(); ++i)
 			 	{

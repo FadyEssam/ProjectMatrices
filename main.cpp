@@ -29,6 +29,10 @@ int main(int argc, char const *argv[])
 		{
 			cout<<"Error at line number "<<lineNumber<<": "<<e<<endl;
 		}
+		catch(...)
+		{
+			cout<< "Wrong syntax at line number "<<lineNumber<<endl;
+		}
 
 
 	}
@@ -84,6 +88,10 @@ int main(int argc, char const *argv[])
 							{
 								cout<<e<<endl;
 								if(exit==1) break;
+							}
+							catch(...)
+							{
+								cout<< "Wrong syntax"<<endl;
 							}
 
 			}

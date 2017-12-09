@@ -811,6 +811,54 @@ Matrix Matrix::msin()
 }
 
 
+Matrix Matrix::mlog()
+{
+	if(isConstant())
+	{
+		Matrix result;
+		result.setConstant( log10(this->getConstant().getReal()) );
+		return result;
+	}
+
+
+	Matrix result(rows,columns);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			result[i][j] = Complex(log10(elements[i][j].getReal()));
+		}
+	}
+
+	return result;
+}
+
+
+Matrix Matrix::mexp()
+{
+	if(isConstant())
+	{
+		Matrix result;
+		result.setConstant( exp(this->getConstant().getReal()) );
+		return result;
+	}
+
+
+	Matrix result(rows,columns);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			result[i][j] = Complex(exp(elements[i][j].getReal()));
+		}
+	}
+
+	return result;
+}
+
+
 
 Matrix Matrix::mcos()
 {
