@@ -335,7 +335,7 @@ void Parser::handleLine(string line, int print)
 
  void Parser::load(string filepath)
  {
- 	 ifstream file1(filepath);
+ 	 ifstream file1(filepath.c_str());
  	 string s;
  	while(getline(file1,s)) 
  	{
@@ -891,6 +891,7 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 	}
 	counter++;
 	*numberOfSeparators = Separators;
+
 	
 	for(int i=0; i<numberOfElements; i++)
 	{
@@ -901,7 +902,6 @@ int Parser::splitParentheses(string s, string separators, string** result, int* 
 			(*result)[i].erase((*result)[i].length()-1,1);
 
 	}
-	if(counter==2)
 	return counter;
 
 }
